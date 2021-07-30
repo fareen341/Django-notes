@@ -63,7 +63,7 @@ Django takes security seriously and helps developers avoid many common security 
 Some of the busiest sites on the Web leverage Django’s ability to quickly and flexibly scale.
 
 <a name="five"><h2>2.3 Getting Started with Django</h2></a><br>
-Django App structure.<br>
+Django Project structure.<br>
 ![structure_drawing2_new](https://user-images.githubusercontent.com/59610617/127651090-718b540a-754a-4f72-9f3a-7c6081edf9dc.png)<br>
 Creating first project in VS code editor.<br>
 <pre>
