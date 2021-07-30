@@ -1,4 +1,4 @@
-<h1>CONTENT CONTENT</h1>
+<h1>COURSE CONTENT</h1>
 
 [<h2>1.1 Course Description</h2>](#one)
 
