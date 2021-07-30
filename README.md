@@ -72,6 +72,8 @@ Step 2: in powershell type >django-admin startproject ProjectName(eg GymProject)
 It will create a project name folder : and inside it there will be:
 <li>GymProject</li>
 <li>manage.py</li>
+NOTE: type django-admin to see all commands<br>
+django-admin is Django's command-line utility for administrative tasks. ... In addition, manage.py is automatically created in each Django project. It does the same thing as django-admin but also sets the DJANGO_SETTINGS_MODULE environment variable so that it points to your project's settings.py file.<br>
 
 Now open this project in vscode
 Inside GymProject folder it will have.
@@ -83,8 +85,18 @@ Inside GymProject folder it will have.
 <li>manage.py</li>
 </pre>
 
-NOTE: type django-admin to see all commands<br>
-django-admin is Django's command-line utility for administrative tasks. ... In addition, manage.py is automatically created in each Django project. It does the same thing as django-admin but also sets the DJANGO_SETTINGS_MODULE environment variable so that it points to your project's settings.py file.<br>
+Description of all the files are:<br>
+>__init__.py<br>
+The __init__.py file lets the Python interpreter know that a directory contains code for a Python module. An __init__.py file can be blank.<br>
+>asgi.py<br>
+Asynchronous Server Gateway Interface, used for deploying purpose.<br>
+>wsgi.py<br>
+web server getway interface, used for deploying purpose.<br>
+>urls.py<br>
+List of urls. It's where you define the mapping between URLs and views.
+>manage.py<br>
+A command-line utility that lets you interact with this Django project in various ways.
+>settings.py<br>
 
 Creating first app:<br>
 <pre>
