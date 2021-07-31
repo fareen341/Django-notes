@@ -10,4 +10,4 @@ Django follow MVT, explain MVT based on that diagram.
 -> diagram on github, a project can have many app and every app has manage.py, wsgi.py...files
 
 4)What is django-admin and manage.py and explain its commands?
-->
+-> ref github
