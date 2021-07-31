@@ -89,18 +89,18 @@ Description of all the files are:<br>
 >__init__.py<br>
 The __init__.py file lets the Python interpreter know that a directory contains code for a Python module. An __init__.py file can be blank.<br>
 >asgi.py<br>
-Asynchronous Server Gateway Interface, used for deploying purpose.<br>
+Asynchronous Server Gateway Interface, used for deploying purpose.<br><br>
 >wsgi.py<br>
-web server getway interface, used for deploying purpose.<br>
+web server getway interface, used for deploying purpose.<br><br>
 >urls.py<br>
-List of urls. It's where you define the mapping between URLs and views.
+List of urls. It's where you define the mapping between URLs and views.<br><br>
 >manage.py<br>
-A command-line utility that lets you interact with this Django project in various ways.
+A command-line utility that lets you interact with this Django project in various ways.<br><br>
 >settings.py<br>
 
 Creating first app:<br>
 <pre>
-Step 1: Open vscode terminal type >django-admin startapp firstApp<br>
+Step 1: Open vscode terminal type >django-admin startapp firstApp	OR	python manage.py startapp thirdApp<br>
 Step 2: Register this app in settings.py file:<br>
 >INSTALLED_APPS = [
     'firstApp'
@@ -123,6 +123,7 @@ Types of views<br>
 2)function based view<br>
 
 Creating a very basic view:<br>
+HttpResponse can be text, xml, json, redirect, html, if not found(404)<br>
 <pre>
 views.py
 from django.shortcuts import render, HttpResponse
