@@ -87,16 +87,28 @@ Inside GymProject folder it will have.
 
 Description of all the files are:<br>
 >__init__.py<br>
-The __init__.py file lets the Python interpreter know that a directory contains code for a Python module. An __init__.py file can be blank.<br>
+The __init__.py file lets the Python interpreter know that a directory contains code for a Python module. An __init__.py file can be blank.<br><br>
 >asgi.py<br>
 Asynchronous Server Gateway Interface, used for deploying purpose.<br><br>
 >wsgi.py<br>
-web server getway interface, used for deploying purpose.<br><br>
+web server getway interface, used for deploying purpose.This is an entry point for your application which is used by the web servers to serve the project you have created.<br><br>
 >urls.py<br>
 List of urls. It's where you define the mapping between URLs and views.<br><br>
 >manage.py<br>
 A command-line utility that lets you interact with this Django project in various ways.<br><br>
 >settings.py<br>
+
+What is django-admin and manage.py and explain its commands?<br>
+django-admin is Django's command-line utility for administrative tasks. In addition, manage.py is automatically created in each Django project. It does the same thing as django-admin but also sets the DJANGO_SETTINGS_MODULE environment variable so that it points to your project's settings.py file.<br>
+Some commands are: all commands can be done using django-admin or manage.py<br>
+1)django-admin help<br>
+2)django-admin makemigration<br>
+3)django-admin migrate<br>
+4)django-admin version<br>
+
+Django directory structure:<br>
+![Django-file-structure-normal-image](https://user-images.githubusercontent.com/59610617/127732323-8a3079a8-bb32-4cb8-a04e-0d7a9e63a2e4.jpg)<br>
+
 
 Creating first app:<br>
 <pre>
@@ -149,7 +161,8 @@ Here Project is the root folder and it has two app firstApp, secondApp.<br>
 </pre>
 
 URL Patterns App Level and Project Level<br>
-1)Project Level: not recommended.
+1)Project Level: not recommended.<br>
+The url which is common in all the application we can defined them in project level url.
 <pre>
   from firstApp import views
   from secondApp import views as vw	    #if we give same 'views' name to both the app then it'll give error to resolve this use alias on other views.
@@ -162,11 +175,10 @@ URL Patterns App Level and Project Level<br>
   
 </pre>
 
-2)App Level: recommended
+2)App Level: recommended<br>
+instead of giving all urls in one file, give urls in every app:<br>
+Advantages of giving urls for each app are application reusability, redable format, reduce code complexity.<br>
 <pre>
-instead of giving all urls in one file, give urls in every app:
-Advantages of giving urls for each app are application reusability, redable format, reduce code complexity.
-
 Step 1:create urls.py in every app and import the path, views
 For firstApp:
   from django.urls import path
@@ -228,6 +240,20 @@ studentdetail.html
     &lt;!--We access name using its key--&gt;
 </pre>
 
+<b>For loop in view</b>
+<pre>
+views.py
+	def getcolors(request):
+	    data={'colors':['red','yellow','blue','green']}
+	    return render(request,'firstApp/demo.html',context=data)
+    
+demo.html
+	&lt;h1&gt;Printing colors using for loop:&lt;/h1&gt;
+	{%for i in colors%}
+	&lt;h4&gt;{{i}}&lt;/h4&gt;
+	{%endfor%}
+</pre>
+
 Tags<br>
 <pre>
 Tags are surrounded by {% and %} like this:
@@ -255,6 +281,22 @@ Some filters take an argument:
 
 {{ my_date|date:"Y-m-d" }}
 </pre>
+
+Uppercase the colors name:
+<pre>
+views.py
+	def getcolors(request):
+	    data={'colors':['red','yellow','blue','green']}
+	    return render(request,'firstApp/demo.html',context=data)
+    
+demo.html
+	&lt;h1&gt;Printing colors using for loop:&lt;/h1&gt;
+	{%for i in colors%}
+	&lt;h4&gt;{{i|upper}}&lt;/h4&gt;
+	{%endfor%}
+</pre>
+List of filters:<br>
+
 
 Comments<br>
 <pre>
