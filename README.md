@@ -349,11 +349,14 @@ Step1: create static folder:
 			->img
 
 Step2: include the path:
+We used to give pattern like this.
 STATIC_DIR=os.path.join(BASE_DIR,'static')	//Here we are basically joining the path of static folder and providing the variable name inside the settings.py syntax
 						//We can directly give join the path inside the setting.py syntax like this:
 						STATICFILES_DIRS=[
     							os.path.join(BASE_DIR,'static')
-						]		
+						]
+In new version we'll give like this:
+STATIC_DIR = BASE_DIR / 'static'		#now adding this static_dir variable in staticfiles_dirs
 
 Step3: create list of STATICFILES_DIRS name and give static file inside that list:
 STATICFILES_DIRS=[
