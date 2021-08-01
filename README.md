@@ -295,7 +295,105 @@ demo.html
 	&lt;h4&gt;{{i|upper}}&lt;/h4&gt;
 	{%endfor%}
 </pre>
-List of filters:<br>
+<b>List of filters</b>:<br>
+{{django | length}} : returns length<br>
+{{djangi | slice:'no. of characters'}} : slice the character eg:3 to display 3 chars<br>
+{{django | truncatechars:'no. of characters'}} : returns the given character and rest all in dot...<br>
+Example: hello world<br>
+{{django | truncatechars:'3'}}<br>
+hell...
+{{django | upper/lower}}<br>
+<b>Using both slice and upper</b><br>
+{{django|upper|slice:'3'}}<br>
+
+<b>Formating date</b><br>
+views.py<br>
+    p=datetime.datetime.now()<br>
+    return render(request,'firstApp/studentdetail.html',{'p':p})<br>
+
+{{variable | default:'default value'}}<br>
+D=day in text format<br>
+d=01 return date in form 01,02...09<br>
+j=return 1,2,3...910<br>
+
+DATE_FORMAT: return in format like this: Aug. 1, 2021<br>
+DATE_TIME: return in format like this: SunPMUTCAugust_UTC0AugAugust<br>
+SHORT_DATE_FORMAT: return in format like this: 08/01/2021<br>
+<b>float format</b><br>
+{{django | 'floatformat':'3' }}<br>
+
+<b>Conditional statement</b><br>
+<pre>
+views.py 
+    s='string'
+    f=20.5
+    return render(request,'firstApp/studentdetail.html',{'s':s,'f':f})
+
+Example:
+{'studentname':sname}
+Here studentname is key and sname is value. so we only provide the key in the html.
+
+Syntax:
+1)if
+Syntax
+{{% if variable %}}
+{{% endif %}}
+
+Example:
+{% if s %}
+    value is {{s}}
+{%endif%}
+
+2)if else
+Syntax
+{% if variable is defined %}
+    value of variable: {{ variable }}
+{% else %}
+    variable is not defined
+{% endif %}
+
+Example:
+{% if s %}
+    value of variable: {{ s }}
+{% else %}
+    variable is not defined
+{% endif %}
+
+3)if elseif else
+Example:
+Note: Always give space after variable s and value 'fareen' or it'll give error
+{% if s == 'fareen' %}
+    value of variable: fareen
+{%elif s == 'annu' %}
+    value of variable: annu
+{% else %}
+    value of variable: roma
+{% endif %}
+</pre>
+
+<b>Operators</b>
+<pre>
+1)AND operator
+Example:
+views.py 
+    name="fareen"
+    age=23
+    return render(request,'firstApp/studentdetail.html',{'sname':name,'sage':age})
+
+demo.html
+{% if sname == 'fareen' and sage == 23 %}
+    Name and age is: fareen and 23
+{% else %}
+    Invalid name and age
+{% endif %}
+
+1)OR operator
+{% if sname == 'fareen' or sname == 'Fareen' %}
+    Name and age is: fareen and 23
+{% else %}
+    Invalid name and age
+{% endif %}
+</pre>
 
 
 Comments<br>
