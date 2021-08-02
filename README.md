@@ -493,6 +493,7 @@ Migrate command will migrate all the tables in the migration file, and now we ca
 To check the commands which django send to database to communicate with database:<br>
 >python manage.py sqlmigrate model_name 0001_initial<br>
 When we run the app and try to access the admin we won't get that page because we did'nt crete the super user yet.<br>
+NOTE: Before creating any model we have to run the migration commands<br>
 
 <b>Creation of Super User</b><br>
 To create super user use this command:<br>
@@ -566,7 +567,152 @@ instead of pass we can use list_diaplay=[//list of columns]
 
 Defining Django Models<br>
 Django Model Fields<br>
-Field Options<br>
+1)AutoField()
+<pre>
+autofiled = models.AutoField()
+
+An IntegerField that automatically increments. In one model we can only have one autofield
+</pre>
+2)BigAutoField: It is a 64-bit integer, much like an AutoField except that it is guaranteed to fit numbers from 1 to 9223372036854775807.<br>
+3)BigIntegerField: It is a 64-bit integer, much like an IntegerField except that it is guaranteed to fit numbers from -9223372036854775808 to 9223372036854775807.<br>
+4)BinaryField()
+<pre>
+
+</pre>
+5)BooleanField()
+<pre>
+boolean=models.BooleanField(default=True, verbose_name="this is boolean filed")
+
+If default=True it will be checked
+</pre>
+6)CharField(max_length=len)
+<pre>
+charfield = models.CharField(max_length=50, verbose_name="New name",unique=True,help_text="added help text")
+    
+max_length=required, rest all optional
+</pre>
+7)DateField()
+<pre>
+from django.utils import timezone
+date = models.DateField(default=timezone.now())
+
+It will set the date to current date, if we dont need that ignore the default parameter. 
+</pre>
+8)DecimalField(max_digits=5, decimal_places=2)
+<pre>
+decimalfield = models.DecimalField(max_digits=5, decimal_places=2)
+
+max digits will be 5 and decimal place will be 2,
+Example: 555.55
+</pre>
+9)DurationField()
+<pre>
+
+</pre>
+10)EmailField(max_length=len)
+<pre>
+email = models.EmailField(max_length=200)
+</pre>
+11)FileField(upload_to), ImageField()<br>
+upload_to: optional<br>
+<pre>
+Whenever we add images or files the django will serach for media folder:
+
+Step 1:
+Create FileField()
+file = models.FileField(upload_to='files/', blank=True) 		
+upload_to: destination to keep the files, blank=if true allow field to be blank.
+Here django will always upload the files inside the media folder so, media -> files is the destination for files. Files can be image.
+We have already defined media in root, now if we give location like 'media/files' django will create media -> media -> files.
+
+Create ImageField()
+file = models.ImageField(upload_to='files/', blank=True) 		
+
+Step 2:
+Create a media name folder inside the root folder where manage.py file is there.Just like we make folder for static, templates in the project root folder.
+
+Step 3:
+In settings.py at the end write this:
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+If we won't create the media_url, then the files will be upload to the current root directory.
+
+Step 4:
+In urls.py add the following line:
+if settings.DEBUG:		//for developer mode
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+Note: we need to make some changes in form if the data coming from form. For model above steps will work.
+
+Follow Steps : https://simpleisbetterthancomplex.com/tutorial/2016/08/01/how-to-upload-files-with-django.html
+
+</pre>
+12)FloatField(): It is a floating-point number represented in Python by a float instance.
+<pre>
+floatfield = models.FloatField() 
+</pre>
+13)ImageField()
+<pre>
+
+</pre>
+14)IntegerField(): It is an integer field. Values from -2147483648 to 2147483647 
+<pre>
+integerfield = models.IntegerField() 
+</pre>
+15)GenericIPAddressField: An IPv4 or IPv6 address, in string format (e.g. 192.0.2.30 or 2a02:42fe::4).<br>
+16)NullBooleanField: Like a BooleanField, but allows NULL as one of the options.
+<pre>
+</pre>
+17)PositiveIntegerField: Like an IntegerField, but must be either positive or zero (0).vales from 0 to 2147483647.
+<pre>
+positiveint1 = models.PositiveIntegerField()
+</pre>
+18)PositiveSmallIntegerField: Like a PositiveIntegerField, but only allows values under a certain (database-dependent) point. vales from 0 to 32767.
+<pre>
+positiveint2 = models.PositiveSmallIntegerField()
+</pre>
+19)SlugField: Slug is a newspaper term. A slug is a short label for something, containing only letters, numbers, underscores or hyphens. They’re generally used in URLs.
+<pre>
+</pre>
+20)SmallIntegerField: It is like an IntegerField, but only allows values under a certain (database-dependent) point.
+<pre>
+</pre>
+21)TextField: A large text field. The default form widget for this field is a Textarea.
+<pre>
+text = models.TextField(max_length=2)
+
+will only allow 2 characters.
+</pre>
+22)TimeField: A time, represented in Python by a datetime.time instance.
+<pre>
+time_field = models.TimeField(auto_now=False, auto_now_add=False)
+</pre>
+23)URLField: A CharField for a URL, validated by URLValidator.
+<pre>
+url = models.URLField()
+</pre>
+24)UUIDField: A field for storing universally unique identifiers. Uses Python’s UUID class. When used on PostgreSQL, this stores in a uuid datatype, otherwise in a char(32).
+<pre>
+</pre>
+To take phone number from the user we can use regex and charfield or PhoneNumberField<br>
+25)DateTimeField(auto_now_add=True), DateTimeField(auto_now)
+<pre>
+created_at =  models.DateTimeField(auto_now_add=True)
+updated_at =  models.DateTimeField(auto_now=True)
+
+This is usefull for post, like when the post is created the auto_now_add will add the current date and time, and when updated auto_now() will update according to new date.
+</pre>
+
+Error in fiels:
+<pre>
+You are trying to add a non-nullable field 'positiveint1' to product without a default; we can't do that (the database needs something to populate existing rows).
+Please select a fix:
+ 1) Provide a one-off default now (will be set on all existing 
+rows with a null value for this column)
+ 2) Quit, and let me add a default in models.py
+</pre>
+
 
 
 
