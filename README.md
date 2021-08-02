@@ -728,6 +728,57 @@ Faker Module<br>
 <a name="fourteen"><h2>2.12 Django’s Inbuilt Core Validators</h2></a><br>
 <a name="fifteen"><h2>2.13 Model Based Forms</h2></a><br>
 <a name="sixteen"><h2>2.14 Advanced Templates</h2></a><br>
+<b>Template Inheritance</b><br>
+Template inheritance allows you to build a base “skeleton” template that contains all the common elements of your site and defines blocks that child templates can override.<br>
+<pre>
+base.html	//common for all the pages
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt; {% block title %} {% endblock title %} | XYZ School&lt;/title&gt;
+&lt;/head&gt;
+&lt;body>
+&lt;h1&gt;XYZ School&lt;/h1&gt;
+&lt;nav&gt;
+&lt;a href="/home">Home&lt;/a&gt; |
+&lt;a href="/contact"&gt;Contact&lt;/a&gt; |
+&lt;/nav&gt;
+&lt;!--Header will be same--&gt;
+
+{% block body %} {% endblock body %}    &lt;!--Body will change--&gt;
+
+&lt;!--Footer will be same--&gt;
+&lt;footer&gt;Copywrite xyz company 2021&lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+base.html have header and footer defined. Now this header and footer will be common for all the pages.
+
+home.html
+{% extends 'base.html' %}
+{% block title %}Home{% endblock title %}
+
+{% block body %}  
+&lt;h1&gt;This is Home page&lt;/h1&gt;
+{% endblock body %}
+
+contact.html
+{% extends 'base.html' %}
+{% block title %}Contact{% endblock title %}
+
+{% block body %}  
+&lt;h1&gt;This is Contact page&lt;/h1&gt;
+{% endblock body %}
+</pre>
+
+Template Filters: https://docs.djangoproject.com/en/3.2/ref/templates/builtins/
+
+Template tags for relative URLs<br>
+Advantages of Template Inheritance<br>
+Why Template Filters?<br>
+What is Template Filter?<br>
+How to Create Customized Template Filters?<br>
+
 <a name="seventeen"><h2>2.15 Session Management in Django</h2></a><br>
 <a name="eighteen"><h2>2.16 Authentication & Authorization</h2></a><br>
 <a name="nineteen"><h2>2.17 Class Based Views (CBV)</h2></a><br>
