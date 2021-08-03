@@ -35,7 +35,8 @@
 [<p>2.28 Introduction to Web Services</p>](#thirty)
 [<p>2.29 Introduction to XML</p>](#thirty_one)
 [<p>2.30 Introduction to REST API(Restful Services)</p>](#thirty_two)
-
+[<p>2.31 Connect with MySql</p>](#thirty_three)
+[<p>2.32 Connecting with PostgreSql(Restful Services)</p>](#thirty_four)
 
 -----------------------------
 <a name="one"><h2>1.1 Course Description</h2></a><br>
@@ -491,7 +492,16 @@ makemigrations auto generates migration files containing changes that need to be
 Everytime we make some changes in models.py we have to run migration command and then 
 Migrate command will migrate all the tables in the migration file, and now we can check the table<br>
 To check the commands which django send to database to communicate with database:<br>
->python manage.py sqlmigrate model_name 0001_initial<br>
+>python manage.py sqlmigrate app_name 0001_initial<br>
+Example: 
+<pre>
+>python manage.py sqlmigrate Students 0001_initial
+--
+-- Create model Product
+--
+CREATE TABLE `Students_product` (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY);
+</pre>
+
 When we run the app and try to access the admin we won't get that page because we did'nt crete the super user yet.<br>
 NOTE: Before creating any model we have to run the migration commands<br>
 
@@ -562,6 +572,8 @@ class ProductAdmin(admin.ModelAdmin):
     pass
     
 instead of pass we can use list_diaplay=[//list of columns]
+
+Note: django always create a id field with each model (`id` integer AUTO_INCREMENT NOT NULL PRIMARY KEY);
 </pre>
 
 
@@ -704,6 +716,68 @@ updated_at =  models.DateTimeField(auto_now=True)
 This is usefull for post, like when the post is created the auto_now_add will add the current date and time, and when updated auto_now() will update according to new date.
 </pre>
 
+<b>Adding the primary key</b><br>
+By default django add 'id' primary key on every models, we can define our own primary key. When we define our own primary key, the primary created by django will be removed.
+<pre>
+product_id = models.IntegerField(primary_key=True)
+
+Now when we run the migartion it'll do the following:
+    - Remove field id from product
+    - Add field product_id to product
+</pre>
+
+<b>Relationship fields</b><br>
+1)Foreign key
+<pre>
+class Product(models.Model):
+    product_id = models.IntegerField(primary_key=True)
+    product_name = models.CharField(max_length=20)
+
+class Order(models.Model):
+				//pk table_name, which is Product
+    order_id = models.ForeignKey(Product, on_delete=models.CASCADE)
+    
+whenever we delete a record from product, the related order record will be deleted simultaneously, bcoz we have given on_delete=models.CASCADE, just like we give in mysql.
+Like if user delete the account his all account info in another table gets deleted.
+
+There is no on_update=CASCADE in django
+</pre>
+
+2)OneToOneField(parent_table, on_delete, parent_link=False,  **options)
+<pre>
+Here one to one relation meaning one person can have only one passport
+One user can have only one account.
+
+class Person(models.Model):
+    person_name = models.CharField(max_length=30)
+    person_age = models.IntegerField()
+
+class Passport(models.Model):
+    person = models.OneToOneField(Person, on_delete=CASCADE)
+    passport_no = models.IntegerField()
+    
+Suppose we've added one passport for the record where id=1, and now we try to add another passport for the same id it'll give error:
+'Passport with this Person already exists.'
+
+Now when we delete person record where id=1, it will delete the following record:
+Persons: 1
+Passports: 1
+</pre>
+Example of on_delete=PROTECTED
+<pre>
+On the same above example change on_delete=PROTECTED
+ 
+Now when we delete the person record it won't delete, first we have to delete the passport record then we can delete this record as well.
+</pre>
+Example of limit_choices_to={}
+<pre>
+If we want only some users to create account we can use limit option
+
+user = models.OneToOneField(User, on_delete=PROTECT, limit_choice_to={'is_staff':True})
+Now only those users whose staff status is checked can create account.
+</pre>
+
+
 Error in fiels:
 <pre>
 You are trying to add a non-nullable field 'positiveint1' to product without a default; we can't do that (the database needs something to populate existing rows).
@@ -795,3 +869,33 @@ How to Create Customized Template Filters?<br>
 <a name="thirty"><h2>2.28 Introduction to Web Services</h2></a><br>
 <a name="thirty_one"><h2>2.29 Introduction to XML</h2></a><br>
 <a name="thirty_two"><h2>2.30 Introduction to REST API(Restful Services)</h2></a><br>
+<a name="one"><h2>2.31 Connecting with Mysql</h2></a><br>
+<pre>
+Step 1:
+pip install mysqlclient
+
+Step 2:
+Creating database in mysql
+
+Step 3:
+Give the database name, password etc
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME':  'djangoProject',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
+        'USER':'root',
+        'PASSWORD':'',
+    }
+}
+
+Step 4:
+Run migration commands
+>python manage.py makemigrations
+>python manage.py migrate
+
+Now if we check the djangoProject database we'll get all the migrated tables. 
+
+</pre>
+<a name="one"><h2>2.32 Connecting with PostgreSql</h2></a><br>
