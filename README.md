@@ -37,6 +37,7 @@
 [<p>2.30 Introduction to REST API(Restful Services)</p>](#thirty_two)
 [<p>2.31 Connect with MySql</p>](#thirty_three)
 [<p>2.32 Connecting with PostgreSql(Restful Services)</p>](#thirty_four)
+[<p>List of errors when performing the practical</p>](#thirty_five)
 
 -----------------------------
 <a name="one"><h2>1.1 Course Description</h2></a><br>
@@ -726,6 +727,29 @@ Now when we run the migartion it'll do the following:
     - Add field product_id to product
 </pre>
 
+Error in fiels:
+<pre>
+You are trying to add a non-nullable field 'positiveint1' to product without a default; we can't do that (the database needs something to populate existing rows).
+Please select a fix:
+ 1) Provide a one-off default now (will be set on all existing 
+rows with a null value for this column)
+ 2) Quit, and let me add a default in models.py
+ 
+This error is bcoz we have added some data in the database, now the new column we added and the old column need some data that is why it asks for default data.
+
+To remove this error we can delete the all the (migartions files added+__pycache__ in both app and migrations).
+</pre>
+
+
+
+
+
+
+Define QuerySet<br>
+The Python Template Engine<br>
+Define Jinja2<br>
+Faker Module<br>
+<a name="eleven"><h2>2.9 Relationships in Django Models</h2></a><br>
 <b>Relationship fields</b><br>
 1)Foreign key
 <pre>
@@ -789,6 +813,7 @@ create signals.py in the app:
 Step 2:
 from .models import Passport
 from django.db.models.signals import post_delete
+from django.db.models.deletion import CASCADE, PROTECT
 from django.dispatch import receiver   # to connect signals
 
 @receiver(post_delete, sender=Passport)
@@ -812,29 +837,34 @@ default_app_config = 'Faculty.apps.FacultyConfig'
 Now we can delete the parent record on deleting child record.
 </pre>
 
-Error in fiels:
+<b>Many-to-many</b></br>
+![mmr](https://user-images.githubusercontent.com/59610617/128026876-50217874-c421-4309-bc6b-38be47dacfe7.png)<br>
+
 <pre>
-You are trying to add a non-nullable field 'positiveint1' to product without a default; we can't do that (the database needs something to populate existing rows).
-Please select a fix:
- 1) Provide a one-off default now (will be set on all existing 
-rows with a null value for this column)
- 2) Quit, and let me add a default in models.py
- 
-This error is bcoz we have added some data in the database, now the new column we added and the old column need some data that is why it asks for default data.
+Step 1:
+models.py
+from django.contrib.auth.models import User
+class Song(models.Model):
+    user = models.ManyToManyField(User)
+    song_name = models.CharField(max_length=20)
+    song_duration = models.IntegerField()
 
-To remove this error we can delete the all the (migartions files added+__pycache__ in both app and migrations).
+    def written_by(self):
+        return ",".join([str(p) for p in self.user.all()])
+
+An extra function which return who all have sang that song
+admin.py
+@admin.register(Song)
+class SongAdmin(admin.ModelAdmin):
+    list_display=['song_name','song_duration','written_by']
 </pre>
+Output:<br>
+![op](https://user-images.githubusercontent.com/59610617/128031073-f688a338-e7ba-4546-9822-dfcf4f02862d.png)<br>
 
+Here we can see one song is sang by many singers and many songs is sang by one user<br>
+On deleting the fareen singer<br>
+![op2](https://user-images.githubusercontent.com/59610617/128031719-f066ec79-92d1-4276-9bf7-bcbd0a1c5d2a.png)<br>
 
-
-
-
-
-Define QuerySet<br>
-The Python Template Engine<br>
-Define Jinja2<br>
-Faker Module<br>
-<a name="eleven"><h2>2.9 Relationships in Django Models</h2></a><br>
 <a name="twelve"><h2>2.10 Django Forms or Model Forms</h2></a><br>
 <a name="thirteen"><h2>2.11 Django Form Validation</h2></a><br>
 <a name="fourteen"><h2>2.12 Django’s Inbuilt Core Validators</h2></a><br>
@@ -907,7 +937,7 @@ How to Create Customized Template Filters?<br>
 <a name="thirty"><h2>2.28 Introduction to Web Services</h2></a><br>
 <a name="thirty_one"><h2>2.29 Introduction to XML</h2></a><br>
 <a name="thirty_two"><h2>2.30 Introduction to REST API(Restful Services)</h2></a><br>
-<a name="one"><h2>2.31 Connecting with Mysql</h2></a><br>
+<a name="thirty_three"><h2>2.31 Connecting with Mysql</h2></a><br>
 <pre>
 Step 1:
 pip install mysqlclient
@@ -936,4 +966,5 @@ Run migration commands
 Now if we check the djangoProject database we'll get all the migrated tables. 
 
 </pre>
-<a name="one"><h2>2.32 Connecting with PostgreSql</h2></a><br>
+<a name="thirty_four"><h2>2.32 Connecting with PostgreSql</h2></a><br>
+<a name="thirty_five"><h2>List of errors when performing the practical</h2></a><br>
