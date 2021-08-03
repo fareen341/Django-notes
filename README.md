@@ -716,8 +716,21 @@ updated_at =  models.DateTimeField(auto_now=True)
 
 This is usefull for post, like when the post is created the auto_now_add will add the current date and time, and when updated auto_now() will update according to new date.
 </pre>
+26)To achieve drop down
+<pre>
+option= [
+        ('malad (e)', 'Malad (E)'),
+        ('malad (w)', 'Malad (W)'),
+        ('goregoan', 'Goregoan'),
+        ('andheri (e)', 'Abdheri (E)'),
+        ('andheri (w)', 'Abdheri (W)'),
+        ]
+	
+Branch=models.CharField(max_length=100, choices=option)
+</pre>
 
-<b>Adding the primary key</b><br>
+<b>CONSTRAINTS IN MODEL</b><br>
+<b>1)primary key</b><br>
 By default django add 'id' primary key on every models, we can define our own primary key. When we define our own primary key, the primary created by django will be removed.
 <pre>
 product_id = models.IntegerField(primary_key=True)
@@ -727,13 +740,99 @@ Now when we run the migartion it'll do the following:
     - Add field product_id to product
 </pre>
 
+<b>1)default</b>
+<pre>
+class Location(models.Model):
+    location = models.CharField(max_length=20, default='Mumbai')
+</pre>
+<b>Null vs Blank</b>
+<pre>
+If True, Django will store empty values as NULL in the database. Default is False.
+For both string-based and non-string-based fields, you will also need to set blank=True if you wish to permit empty values in forms, as the null parameter only affects database storage (see blank).
 
+null=True meaning database accept null value.
+blan=True says the field can be empty in a form.
 
+So to achieve the null values in django use:
+case 1:null=True, blank=True
+In this case database will store 'NULL' values.
+MariaDB [djangoProject]> select * from faculty_checkcon;
++----+-----+----------+
+| id | age | location |
++----+-----+----------+
+| 18 |   1 | NULL     |
++----+-----+----------+
+1 row in set (0.000 sec)
 
+case 2:null=False, blank=True
+In this case database will store 'BLANK' values not 'NULL' values:
+MariaDB [djangoProject]> select * from faculty_checkcon where location=NULL;
+Empty set (0.019 sec)
 
+MariaDB [djangoProject]> select * from faculty_checkcon where location='';
++----+-----+----------+
+| id | age | location |
++----+-----+----------+
+| 14 |   2 |          |
+| 15 |   3 |          |
+| 16 |   4 |          |
+| 17 |   5 |          |
++----+-----+----------+
+4 rows in set (0.000 sec)
 
+case 3:null=True, blank=False
+In this case the field can't be empty, but database can accept null values. So this case won't allow record basically.
+</pre>
 
+<b>unique</b>
+<pre>
+location = models.CharField(max_length=20, unique=True)
+</pre>
+<b>check</b><br>
+There is nothing for check in django. We can use if else or something else.<br>
+<b>Some other parameter in models we can use</b>
+<pre>
+1)help_text: Extra “help” text to be displayed with the form widget. It’s useful for documentation even if your field isn’t used on a form.
+Example:
+	Name = models.CharField(max_length=20, help_text="Enter same name as displayed on your aadhar card")
+	
+2)editable: If False, the field will not be displayed in the admin or any other ModelForm. Default is True.
+Example:
+	location = models.CharField(max_length=20, help_text="enter your location", editable=False)
+	
+They are also skipped during model validation.In this case it will store location to '' in db:
+MariaDB [djangoProject]> select * from faculty_checkcon;
++----+-----+----------+
+| id | age | location |
++----+-----+----------+
+| 21 |   1 |          |
++----+-----+----------+
+1 row in set (0.000 sec)
 
+3)verbose_name: Is a human-readable name for the field. If the verbose name isn't given, Django will automatically create it using the field's attribute name, converting underscores to spaces. This attribute in general changes the field name in admin interface.
+Example:
+	location = models.CharField(max_length=20, verbose_name="Customer Location")
+	
+In admin interface the label will be 'Customer Location'.
+
+4)db_column:db_column. The name of the database column to use for this field. If this isn't given, Django will use the field's name. If your database column name is an SQL reserved word, or contains characters that aren't allowed in Python variable names – notably, the hyphen – that's OK.
+Example: 
+	location = models.CharField(max_length=20, verbose_name="Customer Location", db_column="cust_location")
+
+This will change the database column name:
+MariaDB [djangoProject]> select * from faculty_checkcon;
++----+-----+---------------+
+| id | age | cust_location |
++----+-----+---------------+
+| 22 |   1 | Mumbai        |
++----+-----+---------------+
+1 row in set (0.025 sec)
+
+5)validators
+
+6)error_messages
+
+</pre>
 Define QuerySet<br>
 The Python Template Engine<br>
 Define Jinja2<br>
