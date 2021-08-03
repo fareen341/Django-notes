@@ -777,6 +777,40 @@ user = models.OneToOneField(User, on_delete=PROTECT, limit_choice_to={'is_staff'
 Now only those users whose staff status is checked can create account.
 </pre>
 
+<b>Use of signal</b><br>
+We saw in above case when we delete the person then its related record passpord gets deleted automatacally. Now if we want that if passport gets deleted the its related parent table record gets deleted too<br>
+In above table parent deleted then child gets deleted automaticalle<br>
+Here we want if child deleted then parent get automatically deleted too. In this case we can use of signals<br>
+<pre>
+To create signal:
+Step 1:
+create signals.py in the app:
+
+Step 2:
+from .models import Passport
+from django.db.models.signals import post_delete
+from django.dispatch import receiver   # to connect signals
+
+@receiver(post_delete, sender=Passport)
+def delete_related_user(sender, instance, **kwargs):
+    instance.person.delete()
+        
+Here instance.person.delete(), person=parent table name
+
+Step 3:
+apps.py
+class FacultyConfig(AppConfig):
+    name = 'Faculty'
+
+    def ready(selft):
+        import Faculty.signals
+
+Step 4:
+__init__.py
+default_app_config = 'Faculty.apps.FacultyConfig'
+
+Now we can delete the parent record on deleting child record.
+</pre>
 
 Error in fiels:
 <pre>
@@ -785,6 +819,10 @@ Please select a fix:
  1) Provide a one-off default now (will be set on all existing 
 rows with a null value for this column)
  2) Quit, and let me add a default in models.py
+ 
+This error is bcoz we have added some data in the database, now the new column we added and the old column need some data that is why it asks for default data.
+
+To remove this error we can delete the all the (migartions files added+__pycache__ in both app and migrations).
 </pre>
 
 
