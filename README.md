@@ -727,18 +727,7 @@ Now when we run the migartion it'll do the following:
     - Add field product_id to product
 </pre>
 
-Error in fiels:
-<pre>
-You are trying to add a non-nullable field 'positiveint1' to product without a default; we can't do that (the database needs something to populate existing rows).
-Please select a fix:
- 1) Provide a one-off default now (will be set on all existing 
-rows with a null value for this column)
- 2) Quit, and let me add a default in models.py
- 
-This error is bcoz we have added some data in the database, now the new column we added and the old column need some data that is why it asks for default data.
 
-To remove this error we can delete the all the (migartions files added+__pycache__ in both app and migrations).
-</pre>
 
 
 
@@ -751,7 +740,7 @@ Define Jinja2<br>
 Faker Module<br>
 <a name="eleven"><h2>2.9 Relationships in Django Models</h2></a><br>
 <b>Relationship fields</b><br>
-1)Foreign key
+<b>1)ForeignKey()</b>
 <pre>
 class Product(models.Model):
     product_id = models.IntegerField(primary_key=True)
@@ -767,7 +756,7 @@ Like if user delete the account his all account info in another table gets delet
 There is no on_update=CASCADE in django
 </pre>
 
-2)OneToOneField(parent_table, on_delete, parent_link=False,  **options)
+<b>2)OneToOneField(parent_table, on_delete, parent_link=False,  **options)</b>
 <pre>
 Here one to one relation meaning one person can have only one passport
 One user can have only one account.
@@ -837,7 +826,7 @@ default_app_config = 'Faculty.apps.FacultyConfig'
 Now we can delete the parent record on deleting child record.
 </pre>
 
-<b>Many-to-many</b></br>
+<b>ManyToManyField()</b></br>
 ![mmr](https://user-images.githubusercontent.com/59610617/128026876-50217874-c421-4309-bc6b-38be47dacfe7.png)<br>
 
 <pre>
@@ -968,3 +957,15 @@ Now if we check the djangoProject database we'll get all the migrated tables.
 </pre>
 <a name="thirty_four"><h2>2.32 Connecting with PostgreSql</h2></a><br>
 <a name="thirty_five"><h2>List of errors when performing the practical</h2></a><br>
+Error in fiels:
+<pre>
+You are trying to add a non-nullable field 'positiveint1' to product without a default; we can't do that (the database needs something to populate existing rows).
+Please select a fix:
+ 1) Provide a one-off default now (will be set on all existing 
+rows with a null value for this column)
+ 2) Quit, and let me add a default in models.py
+ 
+This error is bcoz we have added some data in the database, now the new column we added and the old column need some data that is why it asks for default data.
+
+To remove this error we can delete the all the (migartions files added+__pycache__ in both app and migrations).
+</pre>
