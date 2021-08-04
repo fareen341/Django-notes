@@ -889,7 +889,7 @@ user = models.OneToOneField(User, on_delete=PROTECT, limit_choice_to={'is_staff'
 Now only those users whose staff status is checked can create account.
 </pre>
 
-<b>Use of signal</b><br>
+<h1>Use of signal</h1>
 We saw in above case when we delete the person then its related record passpord gets deleted automatacally. Now if we want that if passport gets deleted the its related parent table record gets deleted too<br>
 In above table parent deleted then child gets deleted automaticalle<br>
 Here we want if child deleted then parent get automatically deleted too. In this case we can use of signals<br>
