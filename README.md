@@ -940,7 +940,9 @@ Connecting/Registering receiver function: two ways:<br>
 Types of signals<br>
 1)Login and Logout signal:<br>
 >user_logged_in(sender, request, user): sent when user log in successfully. Where sender=class of the user just logged in, request=current HTTPRequest instance, user=The user instance that just logged in<br>
+
 >user_logged_out(sender, request, user): sent when the logout method is called. Where sender=class of the user just logged out, request=current HTTPRequest instance, user=The user instance that just logged out or None if user not authentocated.<br>
+
 >user_login_failed(sender, credential, request): send when the user failed to login successfully.<br><br>
 Example:
 <pre>
@@ -983,14 +985,158 @@ def login_success(sender, request, user, **kwargs):
 
 BOTH WILL WORK SAME:
 
-Step 6:
+signals.py for all three
+@receiver(user_logged_in, sender=User)
+def login_success(sender, request, user, **kwargs):
+    print("Login User:",user)
+#We can perform many tasks like: counting the number of times user login, session & caches storing
+#Every task which we want to trigger right after user login
+
+@receiver(user_logged_out, sender=User)
+def logout(sender, request, user, **kwargs):
+    print("Logout User:",user)
+#We can perform many tasks like: Bye text etc
+
+@receiver(user_login_failed, sender=User)
+def login_failed(sender, credentials, request, **kwargs):
+    print("Login failed User:",sender)
+    print("credential:",credentials)
+#We can perform many tasks like: as in we want to store all who are trying to log in, and want to store in log files etc.
+#login permission as in how many times a particular user can log in etc
+</pre>
+
+2)Model Signals<br>
+A list of signals sent by the model system. We import django.db.models.signals<br>
+>pre_init(sender, *args, **kwargs)<br>
+
+>post_init(sender, *args, **kwargs)<br>
+
+>pre_save(sender, instance, raw, using, update_fields)<br>
+
+>post_save(sender, instance, created, raw, using, update_fields)<br>
+
+>pre_delete(sender, instance, using)<br>
+
+>post_delete(sender, instance, using)<br>
+
+>m2m_changed(sender, instance, action, reverse, model, pk_set, using)<br>
+
+>class_prepared(sender)<br>
+
+To check all other signals import the model signals and then vs code will suggest a list of all signals.
+<pre>
+Step 1:import
+from django.db.models.signals import pre_init, post_init, pre_save, post_save, pre_delete, post_delete
+
+Step 2:create signals
+@receiver(pre_save, sender=User)
+def startofsave(sender, instance, **kwargs):
+    print("Sender:",sender)
+    print("Instance:",instance)
+    print(f"Kwargs: {kwargs}")
+    
+This will run before the data gets saved in the db. And it will also run  when record updated and save.
+
+@receiver(post_save, sender=User)
+def endofsave(sender, instance, created, **kwargs):
+    if created:     #if created run this
+        print("Created:",created)
+    else:           #if update run this
+        print("Created:",created)
+
+This will run after the data gets saved in the db.If the data save in the database then if will run and created will be True, if data is updated and saved then the else part will run and created will be False.
+
+@receiver(pre_delete, sender=User)
+def startofdelete(sender, instance, **kwargs):
+    print("Pre delete, Sender:",sender)
+
+@receiver(post_delete, sender=User)
+def endofdelete(sender, instance, **kwargs):
+    print("Post delete, Sender:",sender)
+    
+Pre init, post init: used when django model instiantiate:
+@receiver(pre_init, sender=User)
+def startofpre(sender, *args, **kwargs):
+    print("Pre init, Sender:",sender)
+
+@receiver(post_init, sender=User)
+def endofpre(sender, *args, **kwargs):
+    print("Post init, Sender:",sender)
 
 </pre>
-Model Signals<br>
-Managemenet Signals<br>
-Request/Response Signal<br>
-Test Signal<br>
-Database Wrappers<br>
+3)Managemenet Signals: sent by django-admin, We use django.db.models.signals<br>
+>pre_migrate(sender, app_config, verbosity, interactive, using, plan, apps)
+
+>post_migrate(sender, app_config, verbosity, interactive, using, plan, apps)
+
+<pre>
+from django.db.models.signals import pre_migrate, post_migrate
+
+@receiver(pre_migrate)
+def beforemigrate(sender, app_config, verbosity, interactive, using, plan, apps, **kwargs):
+    print("Before migrate:",sender)
+
+@receiver(post_migrate)
+def aftermigrate(sender, app_config, verbosity, interactive, using, plan, apps, **kwargs):
+    print("After migrate:",sender)
+    
+Output: It will run for all migrations
+  Apply all migrations: admin, auth, contenttypes, sessions
+Before migrate: <AdminConfig: admin>
+Before migrate: <AuthConfig: auth>
+Before migrate: <ContentTypesConfig: contenttypes>
+Before migrate: <SessionsConfig: sessions>
+Before migrate: <App1Config: App1>
+Running migrations:
+  No migrations to apply.
+After migrate: <AdminConfig: admin>
+After migrate: <AuthConfig: auth>
+After migrate: <ContentTypesConfig: contenttypes>
+After migrate: <SessionsConfig: sessions>
+After migrate: <App1Config: App1>
+</pre>
+
+4)Request/Response Signal: send on request and response<br>
+
+>request_started(sender, environ)
+
+>request_finished(sender)
+
+>got_request_exception(sender,request)
+
+<pre>
+from  django.core.signals import request_started, request_finished, got_request_exception
+
+@receiver(request_started)
+def request_started(sender, environ, **kwargs):
+    print("Request started, sender:",sender)
+
+@receiver(request_finished)
+def request_finished(sender, **kwargs):
+    print("Request ended, sender:",sender)
+
+@receiver(got_request_exception)
+def got_request_exception(sender,request, **kwargs):
+    print("sender:",sender)
+    #whenever we got exception run this
+</pre>
+
+5)Test Signal: Signals only sent when running tests. We use django.test.signals<br>
+>setting_changed(sender, setting, value, enter)<br>
+
+6)Database Wrappers: signals sent by the database wrapper when a database connection is initiated. We use django.db.backends.signals<br>
+>connection_created(sender, connection, **kwargs)
+
+<pre>
+@receiver(connection_created)
+def conncreted(sender, connection, **kwargs):
+    print("Connection created:")
+    print("Sender:",sender)
+    
+Output: Will run as soon as conncetion to the database created
+Connection created:
+Sender: <class 'django.db.backends.mysql.base.DatabaseWrapper'>
+</pre>
 Custome Signals<br><br>
 
 Built-in signals<br>
