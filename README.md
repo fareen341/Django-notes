@@ -923,7 +923,79 @@ __init__.py
 default_app_config = 'Faculty.apps.FacultyConfig'
 
 Now we can delete the parent record on deleting child record.
+</pre><br>
+What is signal?<br>
+Signals allow certain senders to notify a set of receivers that some action has taken place.<br>
+Sender : who will send signal<br>
+Signal : signal<br>
+Receiver: who receive signal<br>
+Example: in train signal, there must be a guy who sends the signal which is red flag to the train, here signal is send by signal guy, and signal dispacher is red flag and receiver is train. That guy must know whom to send the signal same in django we must know to whom we send signal.<br>
+Receiver signal:<br>
+>Signal Syntax: def receiver_fun(sender, request, user, **kwargs): <br>
+
+Connecting/Registering receiver function: two ways:<br>
+>Manual connect route: we use Signal.connect(receiver_func, sender=NOne, weak=True, dispatch_uid=None) method in this.<br>
+>Decorator: @receiver(signal or list of signal, sender)<br><br>
+
+Types of signals<br>
+1)Login and Logout signal:<br>
+>user_logged_in(sender, request, user): sent when user log in successfully. Where sender=class of the user just logged in, request=current HTTPRequest instance, user=The user instance that just logged in<br>
+>user_logged_out(sender, request, user): sent when the logout method is called. Where sender=class of the user just logged out, request=current HTTPRequest instance, user=The user instance that just logged out or None if user not authentocated.<br>
+>user_login_failed(sender, credential, request): send when the user failed to login successfully.<br><br>
+Example:
+<pre>
+Step 1: create signals.py in the app
+
+Step 2: import the necessary files
+from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
+from django.contrib.auth.models import User
+
+Step 3:override the ready methon inside apps.py
+class App1Config(AppConfig):
+    name = 'App1'
+
+    def ready(self):
+        import App1.signals
+	
+Step 4:__init__.py or settings.py
+__init__.py
+defaut_app_config = 'App1.apps.App1Config'
+
+OR
+settings.py
+'App1.apps.App1Config'
+
+Step 5:register receiver signal 
+Manual connect
+def login_success(sender, request, user, **kwargs):
+    print("User:",user)
+
+user_logged_in.connect(login_success,sender=User)
+
+OR
+Decorator
+from django.dispatch import receiver
+
+@receiver(user_logged_in, sender=User)
+# Create your models here.
+def login_success(sender, request, user, **kwargs):
+    print("User:",user)
+
+BOTH WILL WORK SAME:
+
+Step 6:
+
 </pre>
+Model Signals<br>
+Managemenet Signals<br>
+Request/Response Signal<br>
+Test Signal<br>
+Database Wrappers<br>
+Custome Signals<br><br>
+
+Built-in signals<br>
+
+
 
 <b>ManyToManyField()</b></br>
 ![mmr](https://user-images.githubusercontent.com/59610617/128026876-50217874-c421-4309-bc6b-38be47dacfe7.png)<br>
