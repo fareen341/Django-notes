@@ -1172,6 +1172,155 @@ On deleting the fareen singer<br>
 ![op2](https://user-images.githubusercontent.com/59610617/128031719-f066ec79-92d1-4276-9bf7-bcbd0a1c5d2a.png)<br>
 
 <a name="twelve"><h2>2.10 Django Forms or Model Forms</h2></a><br>
+<b>Creating normal html form(data coming from raw html)</b>
+<pre>
+Step 1: models.py
+class Product(models.Model):
+    product_name = CharField(max_length=30)
+    product_purchase = CharField(max_length=10)
+    product_code = IntegerField()
+
+Step 2: demo.html
+&lt;form action="" method="POST" novalidate=""&gt;
+{% csrf_token %}
+	&lt;p&gt;&lt;label for="id_product_name"&gt;Product name:&lt;/label&gt; &lt;input type="text" name="product_name" maxlength="30" required="" id="id_product_name"&gt;&lt;/p&gt;
+	&lt;p&gt;&lt;label for="id_product_purchase"&gt;Product purchase:&lt;/label&gt; &lt;input type="text" name="product_purchase" maxlength="10" required="" id="id_product_purchase">&lt;/p&gt;
+	&lt;p&gt;&lt;label for="id_product_code"&gt;Product code:&lt;/label&gt; &lt;input type="number" name="product_code" required="" id="id_product_code"&gt;&lt;/p&gt;
+	&lt;input type="submit" values="submit"&gt;
+&lt;/form&gt;
+
+Step 3: views.py
+from .models import Product
+
+def showformdata(request):
+    if request.method=="POST":
+        product_name=request.POST.get('product_name')
+        product_purchase=request.POST.get('product_purchase')
+        product_code=request.POST.get('product_code')
+        reg=Product(product_name=product_name,product_purchase=product_purchase,product_code=product_code)
+        reg.save()
+    return render(request,'demo.html')
+</pre>
+
+
+<b>Django form using form api</b>
+<pre>
+Step 1:models.py
+class Product(models.Model):
+    product_name = CharField(max_length=30)
+    product_purchase = CharField(max_length=10)
+    product_code = IntegerField()
+    
+Step 2: create forms.py
+from django import forms
+
+class ProductDetails(forms.Form):
+    product_name = forms.CharField(max_length=30)     #product_name will become the label name with p uppercase
+    product_purchase = forms.CharField(max_length=10)
+    product_code = forms.IntegerField()
+    
+Here product_name will become the name which comes from html.
+
+Step 3: demo.html
+&lt;html&gt;
+&lt;body&gt;
+&lt;h1&gt;Hello&lt;/h1&gt;
+&lt;form action="" method="POST" novalidate&gt;
+{% csrf_token %}
+{{form.as_p}}
+&lt;input type="submit" values="submit"&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+Step 4:views.py
+from .forms import ProductDetails
+from .models import Product
+
+# Create your views here.
+def showformdata(request):
+    if request.method == "POST":
+        fm = ProductDetails(request.POST)
+        if fm.is_valid():
+            nm = fm.cleaned_data['product_name']
+            ph = fm.cleaned_data['product_purchase']
+            cd = fm.cleaned_data['product_code']
+            reg = Product(product_name=nm, product_purchase=ph, product_code=cd)
+            reg.save()
+    else:
+        fm = ProductDetails()
+    return render(request, 'demo.html',{"form":fm})
+</pre>
+<b>Form Rendering Options</b><br>
+{{form}} will render them all.<br>
+{{form.as_table}} will render them as table cells wrapped in &lt;tr&gt; tags.<br>
+{{form.as_p}} will render then wrapped in &lt;p&gt; tag.<br>
+{{form.as_ul}} will render them wrapped in &lt;li&gt; tags<br>
+{{form.name_of_field}} will render field manually as given.<br>
+
+<p>Django form using ModelForm:</b><br>
+What is ModelForm?<br>
+Django ModelForm is a class that is used to directly convert a model into a Django form. If you're building a database-driven app, chances are you'll have forms that map closely to Django models.<br>
+Steps to create Model Form
+<pre>
+Step 1: create models
+class Product(models.Model):
+    product_name = CharField(max_length=30)
+    product_purchase = CharField(max_length=10)
+    product_code = IntegerField()
+    
+Step 2:create forms.py inside the app
+from .models import Product
+
+class ProductDetails(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['product_name','product_purchase','product_code']
+        labels = {'product_name':'Enter product Name',
+                  'product_purchase':'Enter product purchase date',
+                  'product_code':'Enter product code'}
+        error_messages = {
+            'product_name':{'required':'Name is required'},
+            'product_purchase':{'required':'purchase date is required is required'}
+        }
+        widgets = {
+            'product_code':forms.PasswordInput({'placeholder':'passcode'})
+        }
+
+creating form for the product, now the data coming in this form will be send to views and cleaned data will be saved to db.
+
+Step 3: views.py
+from .forms import ProductDetails
+from .models import Product
+
+def showformdata(request):
+    if request.method == "POST":
+        fm = ProductDetails(request.POST)
+        if fm.is_valid():
+            nm = fm.cleaned_data['product_name']
+            ph = fm.cleaned_data['product_purchase']
+            cd = fm.cleaned_data['product_code']
+            reg = Product(product_name=nm, product_purchase=ph, product_code=cd)
+            reg.save()
+    else:
+        fm = ProductDetails()
+    return render(request, 'demo.html',{"form":fm})
+    
+The 'form' key will pass in html form like we use {{form.as_p}}
+    
+ Step 4: demo.html
+&lt;html&gt;
+&lt;body&gt;
+	&lt;h1&gt;Hello&lt;/h1&gt;
+	&lt;form action="" method="POST" novalidate&gt;     //django form does not provide the form tag and button so we have to write it.
+	{% csrf_token %}
+	{{form.as_p}}
+	&lt;input type="submit" values="submit"&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+No validation bcoz we want to see the django form validation.
+</pre>
+
 <a name="thirteen"><h2>2.11 Django Form Validation</h2></a><br>
 <a name="fourteen"><h2>2.12 Django’s Inbuilt Core Validators</h2></a><br>
 <a name="fifteen"><h2>2.13 Model Based Forms</h2></a><br>
