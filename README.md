@@ -28,6 +28,7 @@
 [<p>2.21 How to Send Email in a Django</p>](#twenty_three)
 [<p>2.22 Outputting CSV with Django</p>](#twenty_four)
 [<p>2.23 Outputting PDF with Django</p>](#twenty_five)
+https://simpleisbetterthancomplex.com/tutorial/2016/08/08/how-to-export-to-pdf.html
 [<p>2.24 Django Crispy Forms</p>](#twenty_six)
 [<p>2.25 GIT & Github</p>](#twenty_seven)
 [<p>2.26 Bitbucket</p>](#twenty_eight)
@@ -93,12 +94,17 @@ The __init__.py file lets the Python interpreter know that a directory contains 
 >asgi.py<br>
 Asynchronous Server Gateway Interface, used for deploying purpose.<br><br>
 >wsgi.py<br>
-web server getway interface, used for deploying purpose.This is an entry point for your application which is used by the web servers to serve the project you have created.<br><br>
+web server getway interface, It is used to forward requests from a web server (such as Apache or NGINX) to a backend Python web application or framework. From there, responses are then passed back to the webserver to reply to the requestor.<br>
 >urls.py<br>
 List of urls. It's where you define the mapping between URLs and views.<br><br>
 >manage.py<br>
 A command-line utility that lets you interact with this Django project in various ways.<br><br>
 >settings.py<br>
+
+Django Request Response life cycle<br>
+wsgi.py acts as the interface between web server and django application<br>
+
+![request-response](https://user-images.githubusercontent.com/59610617/128341168-1a2a9e77-0356-4cef-ac50-30ae958e6266.png)<br>
 
 What is django-admin and manage.py and explain its commands?<br>
 django-admin is Django's command-line utility for administrative tasks. In addition, manage.py is automatically created in each Django project. It does the same thing as django-admin but also sets the DJANGO_SETTINGS_MODULE environment variable so that it points to your project's settings.py file.<br>
@@ -728,6 +734,55 @@ option= [
 	
 Branch=models.CharField(max_length=100, choices=option)
 </pre>
+
+<h3>ORM in django.</h3>
+One of the most powerful features of Django is its Object-Relational Mapper (ORM), which enables you to interact with your database, like you would with SQL. In fact, Django's ORM is just a pythonical way to create SQL to query and manipulate your database and get results in a pythonic fashion. ORM basically convert your model class in Sql queries <br>
+Benefit of using ORM is anyone who don't know what SQL, MySql, Oracle is can also work with models.<br>
+We can change the database anytime we want, we don't need to write the seperate sql queries for that example if today i use MySql and tmrw i want my application to work in PostgreSql then i don't need to write queries for PostgreSql i can use the same model, and ORM will help me to convert it in postgresql queries.<br>
+
+![orm](https://user-images.githubusercontent.com/59610617/128343962-c7c584e0-7ff2-4add-8734-8724e8d6fe19.png)<br>
+
+<h3>Queryset in django.</h3>
+A QuerySet represents a collection of objects from your database. It can have zero, one or many filters. Filters narrow down the query results based on the given parameters. In SQL terms, a QuerySet equates to a SELECT statement, and a filter is a limiting clause such as WHERE or LIMIT .<br>
+<pre>
+Step 1: open python interactive shell
+>python manage.py shell
+
+Step 2: import the model which you in which we want to apply query.
+from home.models import Contact
+
+Step 3: Query the queryset you want
+
+To get all the objects in db.
+>>>Contact.objects.all() 
+
+To get the first object.
+>>>Contact.objects.all()[0]
+
+To get the name of the first object.
+>>>Contact.objects.all()[0].name
+
+To get first and last Entry:
+>>>Contact.objects.all().first() 
+>>>Contact.objects.all().last() 
+
+USING FILTER: to filter records.
+To filter the query by name
+>>>Contact.objects.filter(name='annu') 
+
+filter query where name='fareen' and contact='999999999'
+>>>Contact.objects.filter(name='fareen',contact='999999999')
+
+To filter based on text search:
+>>> Contact.objects.filter(desc__startswith="this") 
+<QuerySet [<Contact: fareen>, <Contact: sam>]>
+
+ADDING DATA:
+We can add and edit the record in db using filters.
+To add the record 
+>>> joe = Address.objects.create(email="Joe@123",city="mumbai").save()		//it'll without save() too
+</pre>
+For more queryset: making queries django, on google.<br> 
 
 <b>CONSTRAINTS IN MODEL</b><br>
 <b>1)primary key</b><br>
@@ -1432,6 +1487,21 @@ How to Create Customized Template Filters?<br>
 
 <a name="seventeen"><h2>2.15 Session Management in Django</h2></a><br>
 <a name="eighteen"><h2>2.16 Authentication & Authorization</h2></a><br>
+Authentication vs Authorization:<br>
+Authentication confirms that users are who they say they are.Example username & password<br>
+Authorization gives those users permission to access a resource. Example i only can access my facebook settings, privacy etc.<br>
+
+![Authentication_vs_Authorization](https://user-images.githubusercontent.com/59610617/128353973-5dc9e5fe-951a-46db-852b-40b27b4c78aa.png)<br>
+
+what all django admin provides?<br>
+Django comes with a built-in admin interface. With Django's admin you can authenticate users, display and handle forms, and validate input; all automatically. Django also provides a convenient interface to manage model data.<br>
+What is not included in django admin<br>
+Django does'nt provide all these tho we can use if else or third party, or other way to achieve all these.<br>
+1)Password strength checking <br>
+2)Throttling of login attemps: it means someone trying to access the site with different name and combinations of different name, number etc., So django does'nt provide this.<br>
+3)Authentication against third-parties(OAuth, for example): example login by fb,google etc.<br>
+4)Object-level permission: permission like only some members can access particular models etc.<br>
+
 <a name="nineteen"><h2>2.17 Class Based Views (CBV)</h2></a><br>
 <a name="twenty"><h2>2.18 Django File Upload</h2></a><br>
 <a name="twenty_one"><h2>2.19 Django CRUD Operations</h2></a><br>
