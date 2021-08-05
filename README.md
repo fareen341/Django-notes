@@ -1437,11 +1437,11 @@ demo.html
 
 Here use the boostrap starter template and put the form code inside the starter template conatiner
 
-<form method="post">
+&lt;form method="post"&gt;
     {% csrf_token %}
      {{ form.as_p}}
-    <button type="submit">Sign in</button>
-  </form>
+    &lt;button type="submit">Sign in&lt;/button&gt;
+  &lt;/form&gt;
 </pre>
 This is just the bootstrap form with django default validation.<br>
 
@@ -1453,20 +1453,20 @@ Bootstrap form with validation using crispy form.<br>
 Just change the demo.html
 
 {% load crispy_forms_tags %}
-<div class="container">
- <form method="post" novalidate="">
+&lt;div class="container"&gt;
+ &lt;form method="post" novalidate=""&gt;
     {% csrf_token %}
     {{ form|crispy }}
-    <button type="submit" class="btn btn-primary">Sign in</button>
-  </form>
- </div>
+    &lt;button type="submit" class="btn btn-primary"&gt;Sign in&lt;/button&gt;
+  &lt;/form&gt;
+ &lt;/div&gt;
 </pre>
 
 ![after](https://user-images.githubusercontent.com/59610617/128303285-2269bf18-b84c-48f2-a829-be2e0b76f363.png)<br>
 
 Custom Fields Placement with Crispy Forms<br>
 <pre>
-code in boostrap.txt
+	code in boostrap.txt
 </pre>
 
 ![b1](https://user-images.githubusercontent.com/59610617/128303355-65ef7352-0b23-4dcd-9254-ed52de8c8054.png)<br>
