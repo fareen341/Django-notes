@@ -829,6 +829,22 @@ MariaDB [djangoProject]> select * from faculty_checkcon;
 1 row in set (0.025 sec)
 
 5)validators
+This is model level validation, when we work on admin user interface these validation will work on that, if form is coming from html then this validation won't work, for that we use form level validation or html validations.
+
+from django.db import models
+from django.core.exceptions import ValidationError
+
+def validate_domainonly_email(value):
+    """
+    Let's validate the email passed is in the domain "yourdomain.com"
+    """
+    if not "yourdomain.com" in value:
+        raise ValidationError("Sorry, the email submitted is invalid. All emails have to be registered on this domain only.")
+
+model:
+important_email = models.EmailField(validators=[validate_domainonly_email], max_length=30)
+
+This validation is reusable we can apply this validation on mant email fields present in the model.
 
 6)error_messages
 
@@ -1323,6 +1339,44 @@ No validation bcoz we want to see the django form validation.
 
 <a name="thirteen"><h2>2.11 Django Form Validation</h2></a><br>
 <a name="fourteen"><h2>2.12 Django’s Inbuilt Core Validators</h2></a><br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <a name="fifteen"><h2>2.13 Model Based Forms</h2></a><br>
 <a name="sixteen"><h2>2.14 Advanced Templates</h2></a><br>
 <b>Template Inheritance</b><br>
@@ -1472,6 +1526,48 @@ Custom Fields Placement with Crispy Forms<br>
 ![b1](https://user-images.githubusercontent.com/59610617/128303355-65ef7352-0b23-4dcd-9254-ed52de8c8054.png)<br>
 
 ![b2](https://user-images.githubusercontent.com/59610617/128303368-4c43a3e1-7e97-4095-b38b-b77bb567ef88.png)<br>
+
+<h1></h1>
+In-built validation<br>
+If we want our own validtion to apply on particular filed use the validator.
+<pre>
+We can either define the validation for particular filed or reuse it using validation.
+Method 1: For email field only
+forms.py
+
+from django import forms
+
+class ContactForm(forms.Form): 
+    email       = forms.EmailField()
+
+    def clean(self):
+        # form level cleaning
+        cleaned_data = super(ContactForm, self).clean()
+        email_passed = cleaned_data.get("email")
+        if not "yourdomain.com" in email_passed:
+            raise forms.ValidationError("Sorry, the email submitted is invalid. All emails have to be registered on this domain only.")
+	
+Method 2: For all the emails in the entire form
+
+In forms.py
+Define your custome validation before creating the validation:
+
+from django import forms 
+from django.core.exceptions import ValidationError
+
+def validate_domainonly_email(value):
+    """
+    Let's validate the email passed is in the domain "yourdomain.com"
+    """
+    if not "yourdomain.com" in value:
+        raise ValidationError("Sorry, the email submitted is invalid. All emails have to be registered on this domain only.")
+
+field:
+important_email = forms.EmailField(validators=[validate_domainonly_email], max_length=30)
+customer_email = forms.EmailField(validators=[validate_domainonly_email], max_length=30)
+</pre>
+
+![b3](https://user-images.githubusercontent.com/59610617/128307624-2bc59903-f933-4f48-b29f-32e915f4adc3.png)<br>
 
 
 <a name="twenty_seven"><h2>2.25 GIT & Github</h2></a><br>
