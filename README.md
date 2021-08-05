@@ -1386,6 +1386,94 @@ How to Create Customized Template Filters?<br>
 <a name="twenty_four"><h2>2.22 Outputting CSV with Django</h2></a><br>
 <a name="twenty_five"><h2>2.23 Outputting PDF with Django</h2></a><br>
 <a name="twenty_six"><h2>2.24 Django Crispy Forms</h2></a><br>
+What is django crispy forms?<br>
+Django-crispy-forms is an application that helps to manage Django forms. It allows adjusting forms' properties (such as method, send button or CSS classes) on the backend without having to re-write them in the template.<br>
+Django from with bootstrap 4 form and it's validation.<br>
+<pre>
+Step 1:
+install crispy forms:
+>pip install django-crispy-forms
+
+Step 2:
+Add it to your INSTALLED_APPS and select which styles to use:
+INSTALLED_APPS = [
+    ...
+
+    'crispy_forms',
+]
+
+#add this in the end of settings.py
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+Step 3:
+forms.py
+
+from django import forms
+
+STATES = (
+    ('', 'Choose...'),
+    ('MG', 'Minas Gerais'),
+    ('SP', 'Sao Paulo'),
+    ('RJ', 'Rio de Janeiro')
+)
+
+class AddressForm(forms.Form):
+    email = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Email'}))
+    password = forms.CharField(widget=forms.PasswordInput())
+    address_1 = forms.CharField(
+        label='Address',
+        widget=forms.TextInput(attrs={'placeholder': '1234 Main St'})
+    )
+    address_2 = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Apartment, studio, or floor'})
+    )
+    city = forms.CharField()
+    state = forms.ChoiceField(choices=STATES)
+    zip_code = forms.CharField(label='Zip')
+    check_me_out = forms.BooleanField(required=False)
+    
+Step 4:
+demo.html
+
+Here use the boostrap starter template and put the form code inside the starter template conatiner
+
+<form method="post">
+    {% csrf_token %}
+     {{ form.as_p}}
+    <button type="submit">Sign in</button>
+  </form>
+</pre>
+This is just the bootstrap form with django default validation.<br>
+
+![before](https://user-images.githubusercontent.com/59610617/128303260-6db049ae-0913-43e6-a5d3-f35ea6d91a37.png)
+
+
+Bootstrap form with validation using crispy form.<br>
+<pre>
+Just change the demo.html
+
+{% load crispy_forms_tags %}
+<div class="container">
+ <form method="post" novalidate="">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-primary">Sign in</button>
+  </form>
+ </div>
+</pre>
+
+![after](https://user-images.githubusercontent.com/59610617/128303285-2269bf18-b84c-48f2-a829-be2e0b76f363.png)<br>
+
+Custom Fields Placement with Crispy Forms<br>
+<pre>
+code in boostrap.txt
+</pre>
+
+![b1](https://user-images.githubusercontent.com/59610617/128303355-65ef7352-0b23-4dcd-9254-ed52de8c8054.png)<br>
+
+![b2](https://user-images.githubusercontent.com/59610617/128303368-4c43a3e1-7e97-4095-b38b-b77bb567ef88.png)<br>
+
+
 <a name="twenty_seven"><h2>2.25 GIT & Github</h2></a><br>
 <a name="twenty_eight"><h2>2.26 Bitbucket</h2></a><br>
 <a name="twenty_nine"><h2>2.27 Deploying Django Apps & Heroku</h2></a><br>
