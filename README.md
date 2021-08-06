@@ -558,6 +558,16 @@ We can concat str with email or anything we want.
 return self.name + " " + self.email
 </pre>
 
+<b>Adding the Search filter</b>
+<pre>
+search_fields = ['name','location']	//it will search by name and location
+</pre>
+
+<b>Editable list</b>
+<pre>
+editable_list = ['password','city']	//these can be directily editable.
+</pre>
+
 Creating the first model.<br>
 <pre>
 Step 1:
