@@ -154,7 +154,37 @@ def firstview(request):
 This view will return http response.
 </pre>
 
-Developing different views<br>
+<b>How GET & POST request works in view.</b>
+<pre>
+def showformdata(request):
+    if request.method == "POST":
+        fm = ProductDetails(request.POST)
+        if fm.is_valid():
+            nm = fm.cleaned_data['product_name']
+            ph = fm.cleaned_data['product_purchase']
+            cd = fm.cleaned_data['product_code']
+            reg = Product(product_name=nm, product_purchase=ph, product_code=cd)
+            reg.save()
+    else:
+        fm = ProductDetails()
+    return render(request, 'demo.html',{"form":fm})
+</pre>
+In the above code when we hit the url defined the urls.py the get request get called meaning the else part will run and bcoz of that we can see the blank form, When the request is post 'if'  part runs, meaning when we click the 'submit' button the post method gets called.<br>
+NOTE: Whenever we hit the url the get method called always and when click on input submit button post method called.<br>
+<b>To get the two different templates for same view</b>
+<pre>
+views.py
+def myview(request, template_name):
+    mytemp = template_name
+    form = ContactForm()
+    return render(request, mytemp , {'form':form})
+
+urls.py
+path('class1/',views.myview, {'template_name':'index.html'}, name="class1"),
+path('class2/',views.myview, {'template_name':'index2.html'}, name="class2"),
+</pre>
+
+
 
 <a name="seven"><h2>2.5 URL dispatcher</h2></a><br>
 Syntax : path(route, view, kwargs=None, name=None)<br>
@@ -1554,6 +1584,178 @@ admin.site.index_title = "welcome to this portal"       #After login the the hea
 </pre>
 
 <a name="nineteen"><h2>2.17 Class Based Views (CBV)</h2></a><br>
+Base Class-Based Views / Base View<br>
+Generic Class-Based Views / Generic View<br>
+
+Advantages:<br>
+1)Organization of code related to specific HTTP methods(GET, POST, etc) can be addressed by seperate methods instead of conditional branching.<br>
+2)Can use inheritance.<br>
+
+Basic example of class vs function based view.<br>
+In function based view we don't write get method, bcoz when we hit url get method is called. But in class based view we must get method. See below example.
+<pre>
+views.py
+function view:
+from django.http import HttpResponse
+def myview(request):
+	return HttpResponse("Hello")
+
+urls.py
+from django.urls import path
+from school import views
+urlpattern = [
+		path('hello/',views.myview, name='hello'),
+	]
+
+class view:
+from django.views import View
+class MyView(View):
+	def get(self,request):
+		return HttpResponse("Hello")
+
+urls.py
+from django.urls import path
+from school import views
+urlpattern = [
+		path('hello/',views.MyView(), name='hellohello	]
+</pre>
+
+<h2>Base Class-Based Views / Base View</h2><br>
+In this we have View, TemplateView, RedirectView.<br
+To see the code of parent 'VIEW' go to :<br> C:\Users\faree\AppData\Local\Programs\Python\Python39\Lib\site-packages\djongo\views\generic<br>
+<pre>
+>>To return name from class:
+class MyClassView(View):
+    name="fareen"
+    def get(self,request):
+        return HttpResponse(self.name)
+	
+>>Or we can directly pass this in class:
+path('class/',views. MyClassView.as_view(name="ansari"), name="class")
+
+For this to run we must defind name inside the class.
+
+>>To reuse the class, inherit it:
+class MyClassView(View):
+    name="fareen"
+    def get(self,request):
+        return HttpResponse(self.name)
+
+class ChildView(MyClassView):		#accessing the name in child class.
+    def get(self,request):
+        return HttpResponse(self.name)
+
+Create url for both.
+
+>>To render html in class based view:
+class MyClassView(View):
+    def get(self,request):
+        return render(request, 'index.html')
+
+>>To return the context:
+class MyClassView(View):
+    def get(self,request):
+        context = {'msg':'welcome to my page'}
+        return render(request, 'index.html', context)
+
+index.html
+&lt;h1&gt; {{msg}} &lt;/h1&gt;
+</pre>
+
+<b>Class based view returning post method</b><br>
+GET, POST request.<br>
+In the above code when we hit the url defined the urls.py the get request get called meaning the else part will run and bcoz of that we can see the blank form, When the request is post 'if'  part runs, meaning when we click the 'submit' button the post method gets called.<br>
+But in class based view we have to define every method. So we have to defined get request for blank form and we get this form when we hit the url. And POST method for form data.<br>
+<pre>
+class MyClassView(View):
+    #here we'll write function based view's else part which we write for get method 
+    def get(self,request):
+        form = ContactForm()
+        return render(request, 'index.html', {'form':form})
+
+    def post(self, request):
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data['name'])
+        return HttpResponse('Form submitted')
+
+index.html
+&lt;form action="" method="POST"&gt;
+	{% csrf_token %}
+	{{form.as_p}}
+	&lt;input type="submit" value="SUBMIT"&gt;
+&lt;/form&gt;
+</pre>
+
+<b>To get the two different templates for same view</b><br>
+In case we want to write two templaes for the same view, in this case instead of writing the two same views for two different templates write one view and give templates on url.
+<pre>
+class MyClassView(View):
+    template_name = ''
+    def get(self,request):
+        form = ContactForm()
+        return render(request, self.template_name , {'form':form})
+
+urls.py
+path('class1/',views.MyClassView.as_view(template_name='index.html'), name="class1"),
+path('class2/',views.MyClassView.as_view(template_name='index2.html'), name="class2"),
+
+Whenever we hit the url, it search for template_name variable and assign the value we given in url which is index1, index2 and pass that to render function.
+</pre>
+
+<h2>Generic Class-Based Views / Generic View<br></h2
+In every application we use CRUD, so django gave some setup code which we can reuse.<br>
+For example when we want to add data we use create view. These are common task which we can use.<br>
+1)Display View: ListView, DetailView.<br>
+2)Editing View: FormView, CreateView, UpdateView, DeleteView.<br>
+3)Data View: ArchiveIndexView, YearArchiveView, MonthArchiveView, WeekArchiveView, DayArchiveView,TodayArchiveView, DateDetailView.<br>
+
+<h3>Display View<h3>
+ListView: page representing a list of objects.<br>
+This view inherits methods and attributes from the following views: django.views.generic.list.MultipleObjectTemplateResponseMixin, django.views.generic.base.TemplateResponseMixin, django.views.generic.list.BaseListView, django.views.generic.list.MultipleObjectMixin, django.views.generic.base.View<br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PENDING
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <a name="twenty"><h2>2.18 Django File Upload</h2></a><br>
 <a name="twenty_one"><h2>2.19 Django CRUD Operations</h2></a><br>
 <a name="twenty_two"><h2>2.20 Django Middleware</h2></a><br>
