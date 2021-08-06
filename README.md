@@ -521,7 +521,7 @@ We can create many super users using this command<br>
 If in case super admin forget the password we cannot log in without password in this case we can create the another super user and log in and check or change the password<br>
 Super user created, now we can check on browser by providing username, password. We can see Groups and Users tables<br>
 
-Register Model Inside Admin Interface<br>
+<b>Register Model Inside Admin Interface</b><br>
 We have created super user, now we make the first model and we must register that model to admin or we won't we able to see that model in the admin panel<br>
 <pre>
 models.py
@@ -545,6 +545,18 @@ In this list display whatever we add will be visible in the product table on adm
 If we remove something as in 'desc' from this list it won't be visible table on the panel but when we add product it will be there.<br>
 In list_display we can control what we want to see on the table. It won't be deleted but just hidden on that panel<br>
 It should be the same name list_display<br>
+
+<b>Adding the dunder method</b>
+<pre>
+class Product(models.Model):
+	p_name = models.CharField()
+	
+	def __str__(self):
+		return self.p_name
+		
+We can concat str with email or anything we want.
+return self.name + " " + self.email
+</pre>
 
 Creating the first model.<br>
 <pre>
@@ -1493,14 +1505,21 @@ Authorization gives those users permission to access a resource. Example i only 
 
 ![Authentication_vs_Authorization](https://user-images.githubusercontent.com/59610617/128353973-5dc9e5fe-951a-46db-852b-40b27b4c78aa.png)<br>
 
-what all django admin provides?<br>
-Django comes with a built-in admin interface. With Django's admin you can authenticate users, display and handle forms, and validate input; all automatically. Django also provides a convenient interface to manage model data.<br>
-What is not included in django admin<br>
+What all django admin provides?<br>
+Django comes with a built-in admin interface. With Django's admin you can authenticate users, display and handle forms, and validate input; all automatically. Django also provides a convenient interface to manage model data.<br><br>
+What is not included in django admin?<br>
 Django does'nt provide all these tho we can use if else or third party, or other way to achieve all these.<br>
 1)Password strength checking <br>
 2)Throttling of login attemps: it means someone trying to access the site with different name and combinations of different name, number etc., So django does'nt provide this.<br>
 3)Authentication against third-parties(OAuth, for example): example login by fb,google etc.<br>
 4)Object-level permission: permission like only some members can access particular models etc.<br>
+<br>
+Customizing the django admin interface.<br>
+<pre>
+admin.site.site_header = "Welcome Fareen"       #visible on login header
+admin.site.site_title = "Welcom to fareens dashbord"    #title of the site
+admin.site.index_title = "welcome to this portal"       #After login the the header will be this
+</pre>
 
 <a name="nineteen"><h2>2.17 Class Based Views (CBV)</h2></a><br>
 <a name="twenty"><h2>2.18 Django File Upload</h2></a><br>
