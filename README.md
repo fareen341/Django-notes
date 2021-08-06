@@ -314,6 +314,8 @@ hell...
 <b>Using both slice and upper</b><br>
 {{django|upper|slice:'3'}}<br>
 
+MORE FILTERS (https://docs.djangoproject.com/en/3.2/ref/templates/builtins/#std:templatefilter-addslashes)
+
 <b>Formating date</b><br>
 views.py<br>
     p=datetime.datetime.now()<br>
@@ -779,30 +781,30 @@ To get all the objects in db.
 >>>Contact.objects.all() 
 
 To get the first object.
->>>Contact.objects.all()[0]
+Contact.objects.all()[0]
 
 To get the name of the first object.
->>>Contact.objects.all()[0].name
+Contact.objects.all()[0].name
 
 To get first and last Entry:
->>>Contact.objects.all().first() 
->>>Contact.objects.all().last() 
+Contact.objects.all().first() 
+Contact.objects.all().last() 
 
 USING FILTER: to filter records.
 To filter the query by name
->>>Contact.objects.filter(name='annu') 
+Contact.objects.filter(name='annu') 
 
 filter query where name='fareen' and contact='999999999'
->>>Contact.objects.filter(name='fareen',contact='999999999')
+Contact.objects.filter(name='fareen',contact='999999999')
 
 To filter based on text search:
->>> Contact.objects.filter(desc__startswith="this") 
+ Contact.objects.filter(desc__startswith="this") 
 <QuerySet [<Contact: fareen>, <Contact: sam>]>
 
 ADDING DATA:
 We can add and edit the record in db using filters.
 To add the record 
->>> joe = Address.objects.create(email="Joe@123",city="mumbai").save()		//it'll without save() too
+ joe = Address.objects.create(email="Joe@123",city="mumbai").save()		//it'll without save() too
 </pre>
 For more queryset: making queries django, on google.<br> 
 
@@ -1412,6 +1414,26 @@ The 'form' key will pass in html form like we use {{form.as_p}}
 &lt;/html&gt;
 
 No validation bcoz we want to see the django form validation.
+</pre>
+<b>To success message after the form submission</b>
+<pre>
+Step 1: in views.py
+After the save method write the message code.
+
+from django.contrib import messages
+            reg = Address(email=email, password=password)
+            reg.save()
+            messages.success(request, 'Your message has been inserted.')
+	    
+index.html
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show my=0" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+{% endif %}
 </pre>
 
 <a name="thirteen"><h2>2.11 Django Form Validation</h2></a><br>
