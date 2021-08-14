@@ -39,6 +39,7 @@ https://simpleisbetterthancomplex.com/tutorial/2016/08/08/how-to-export-to-pdf.h
 [<p>2.31 Connect with MySql</p>](#thirty_three)
 [<p>2.32 Connecting with PostgreSql(Restful Services)</p>](#thirty_four)
 [<p>List of errors when performing the practical</p>](#thirty_five)
+[<p>Extra</p>](#thirty_six)
 
 -----------------------------
 <a name="one"><h2>1.1 Course Description</h2></a><br>
@@ -599,6 +600,47 @@ search_fields = ['name','location']	//it will search by name and location
 <pre>
 editable_list = ['password','city']	//these can be directily editable.
 </pre>
+
+<b>Adding filter option</b>
+<pre>
+list_filter=['department']   //this will show filter option just like we get in user model
+</pre>
+
+<b>Creating Custom filter</b>
+<pre>
+class filter(simpleListFilter)
+
+cclass CustomFilter(admin.SimpleListFilter):
+    title = 'salary'
+    parameter_name='salary'
+    def lookups(self, request, model_admin):
+        return (('lowSalary','Salary below 40000'),('highSalary','salary above 40000'))
+    
+    def queryset(self,request,queryset):
+        if self.value()=='lowSalary':
+            return queryset.filter(salary__lt=40000) 	#lte for less than and equal to
+
+        elif self.value()=='highSalary':
+            return queryset.filter(salary__gt=40000)
+
+class ProductAdmin(admin.ModelAdmin):
+    list_display=['product_name','product_purchase','product_code','salary']
+    list_filter = [CustomFilter]
+
+admin.site.register(Product, ProductAdmin)
+
+Now in the product model we can see filer where sal less than 40000 and greater than 40000.
+Title will be visible on the product model, and parameter_name will be.
+With the help of lookup we'll get the filter list visible on the browser. 
+</pre>
+
+<b>Ordering</b>
+<pre>
+ordering=['age'] 
+</pre>
+
+<b>To change admin pswd</b>
+python manage.py changepassword model_name
 
 Creating the first model.<br>
 <pre>
@@ -1432,7 +1474,7 @@ from .models import Product
 class ProductDetails(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['product_name','product_purchase','product_code']
+        fields = ['product_name','product_purchase','product_code']		# we can specify what all fileds we need if we need all the fields use fileds=__all__'
         labels = {'product_name':'Enter product Name',
                   'product_purchase':'Enter product purchase date',
                   'product_code':'Enter product code'}
@@ -1463,6 +1505,22 @@ def showformdata(request):
         fm = ProductDetails()
     return render(request, 'demo.html',{"form":fm})
     
+Here we don't need the cleaned data miss taught in lecture. We can direclty write:
+form = ProductForm()
+if request.method=="POST":
+	form.save()  	 
+else:
+        form = ProductDetails()
+    return render(request, 'demo.html',{"form":form})
+    
+def addCourse(request):
+	form=CourseModelForm()
+	if request.method=="POST":
+		form=CourseModelForm(request.POST)
+		if form.is_valid():
+			form.save(commit=TRUE)		#by default commit will be true so it is exceptional.
+	return render(request, 'App1/addcourse.html',{'data':data})
+
 The 'form' key will pass in html form like we use {{form.as_p}}
     
  Step 4: demo.html
@@ -1975,3 +2033,36 @@ This error is bcoz we have added some data in the database, now the new column w
 
 To remove this error we can delete the all the (migartions files added+__pycache__ in both app and migrations).
 </pre>
+
+<a name="thirty_six"><h2>Extra</h2></a><br>
+<h2>To redirect</h2>
+<pre>
+Step 1: import the redirect from shortcut:
+def addCourse(request):
+	form=CourseModelForm()
+	if request.method=="POST":
+		form=CourseModelForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('/App1/courseList')
+	return render(request,'studentapp/addCourse.html',{'data':data})
+</pre>
+
+<h2>Show data in table format</h2>
+
+![table](https://user-images.githubusercontent.com/59610617/129444980-b08c193b-0e80-4871-9719-7e4f831e524f.png)<br>
+
+<h2>To select data using id</h2>
+<pre>
+as in select * from emwhere id=1
+
+in word file
+
+
+get() it will return single record
+filter() it will return multiple record 
+
+</pre>
+
+<h2>To add bootstrap form</h2>
+downloaded the bootstrap cdn and paste it in static css folder and link using {% load static %} then in models.py <br>
