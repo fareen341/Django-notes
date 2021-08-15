@@ -1801,13 +1801,169 @@ For example when we want to add data we use create view. These are common task w
 2)Editing View: FormView, CreateView, UpdateView, DeleteView.<br>
 3)Data View: ArchiveIndexView, YearArchiveView, MonthArchiveView, WeekArchiveView, DayArchiveView,TodayArchiveView, DateDetailView.<br>
 
-<h3>Display View<h3>
+<h3>Display View</h3>
 ListView: page representing a list of objects.<br>
 This view inherits methods and attributes from the following views: django.views.generic.list.MultipleObjectTemplateResponseMixin, django.views.generic.base.TemplateResponseMixin, django.views.generic.list.BaseListView, django.views.generic.list.MultipleObjectMixin, django.views.generic.base.View<br>
 
+ 1)ListView:
+ <pre>
+ Step 1: views.py
+from django.views.generic.list import ListView
+from .models import Student
+
+class StudentList(ListView):
+    model=Student
+    template_name = 'school/student.html'
+    context_object_name = 'students'
+
+    def get_template_names(self):
+        if self.request.user.is_superuser:
+            tempmate_name = 'school/fareen.html'
+        else:
+            tempmate_name =self.template_name
+        return [tempmate_name]
+
+#after running the applictaion it'll show template does'nt exist school/student_list.html the same template we have to make
+# this code has student_list key which we cant see and in html we'll pass it
+
+# instead of all these lines we're only writing one line
+# stud=Student.objects.all()
+# context={'student_list':stud}     This student_list key will be passed to html
+# return render(request,'demo.html',context)
+
+VARIABLES:
+1)To change the name of the _list add one line after model=Student
+template_name_suffix='_get', now it'll search for student_get
+
+2)To give custom name to the template
+template_name="school/student.html"
+now we can use both student_list oe student both will work 
+custom one has high priority over default one if both custom and default present then custom will get the priority
+
+3)To change the ordering eg order by name then use
+ordering = ['name']  or roll or anything
+
+4)To give default context name which we pass in html student_list or object_list we can chage that too:
+context_object_name = 'students' now we can pass students and it'll work
+now we must use students in html default student_list won't work in this case
+
+# METHODS
+1) get_queryset(self):
+Example: to filter based on name
+   def get_queryset(self):
+        return Student.objects.filter(name='fareen')
+
+2) get_context_data(self, *args, **kwargs)
+Example: to use order_by
+    def get_context_data(self, *args, **kwargs):
+        context =super().get_context_data(*args, **kwargs)
+        context['students'] = Student.objects.all().order_by('name')
+        return context
+
+3) get_template_names(self)
+Example: to render the html based on the cookie
+def get_template_names(self):
+        if self.request.COOKIES['user'] == 'fareen':        #if the cookie name is fareen, fareen.html will run else the default 'student.html' one we gave will run
+            tempmate_name = 'school/fareen.html'
+        else:
+            tempmate_name =self.template_name
+        return [tempmate_name]
+	
+Step 2: students.html
+  {% for s in students%}        //Or use object_list both will work
+  {{s.name}}
+  {{s.roll}}
+  {%endfor%}
+</pre>
+
+<h3>Editing View</h3>
+
+![updateview](https://user-images.githubusercontent.com/59610617/129467693-177ab80f-f51e-4560-bad9-7fa84fa959e7.png)<br>
+
+<pre>
+METHOD 1:
+
+Step 1: views.py
+from django.views.generic.base import TemplateView
+from django.views.generic.edit import CreateView, UpdateView
+from .models import Student
+from django import forms
+
+# Create
+class StudentEdit(CreateView):			#this will create a form and accept data as well
+    model=Student
+    fields=['name','roll']
+    success_url = 'thanks'
+    
+    def get_form(self):         #copy same form for update
+        form = super().get_form()
+        form.fields['name'].widget =forms.TextInput()
+        form.fields['roll'].widget =forms.PasswordInput(render_value=True, attrs={'class':'myclass'})		#render_value=True for password to be visible 
+        widgets={'name':forms.TextInput(attrs={'class':'myclass'})}
+        return form,widgets
 
 
+#update based on pk
+class StudetUpdate(UpdateView):		#this will update the data 
+    model=Student
+    fields=['name','roll']
+    success_url = 'thanks'
 
+class ThanksTemplateView(TemplateView):
+    template_name = 'school/thanks.html'
+
+
+Step 2: student_form.html	#this name must be same if we want different name use the variables example given above in list view
+
+  &lt;form action="" method="POST"&gt;
+  {% csrf_token %}
+  {{form.as_p}}
+  &lt;input type="submit" value="Submit"&gt;
+  &lt;/form&gt;
+ 
+Step 3: urls.py
+    path('',views.StudentEdit.as_view()),
+    path('thanks',views.ThanksTemplateView.as_view()),
+    path('update/thanks',views.ThanksTemplateView.as_view()),
+    path('update/<int:pk>',views.StudetUpdate.as_view())
+    
+    
+
+METHOD 2:
+Step 1: forms.py create django model form
+from .models import Student
+from django import forms
+
+class StudentForm(froms.ModelForm):
+	class Meta:
+	model = Student
+	fields = ['name','roll']
+        widgets={'name':forms.TextInput(attrs={'class':'myclass'}), 'roll':
+	forms.PasswordInput(attrs={'class':'myclass'})}
+
+Step 2: views.py
+#form create
+class StudentCreateView(CreateView):		#import create view first
+	form_class = StudentForm
+	template_name = 'school/student_form.html'
+	success_url = 'thanks'
+
+#for update
+class StudentUpdateView(CreateView):		#import create view first
+	model = Student
+	form_class = StudentForm
+	template_name = 'school/student_form.html'
+	success_url = 'update/thanks'
+
+class ThanksTemplateView(TemplateView):
+    template_name = 'school/thanks.html'
+	
+Step 3: create urls
+    path('',views.StudentCreateView.as_view()),
+    path('thanks',views.ThanksTemplateView.as_view()),
+    path('update/<int:pk>',views.StudetUpdate.as_view()),
+    path('update/thanks',views.ThanksTemplateView.as_view()),
+</pre>
 
 
 
@@ -1853,6 +2009,59 @@ PENDING
 <a name="twenty_three"><h2>2.21 How to Send Email in a Django</h2></a><br>
 <a name="twenty_four"><h2>2.22 Outputting CSV with Django</h2></a><br>
 <a name="twenty_five"><h2>2.23 Outputting PDF with Django</h2></a><br>
+<pre>
+Step 1: views.py
+from django.http import HttpResponse, response
+from django.template.loader import get_template		#for pdf
+from django.views.generic import View
+from .utils import render_to_pdf 
+
+class GeneratePDF(View):
+    def get(self, request, *args, **kwargs):
+        template = get_template('invoice.html')
+        context = {
+            "invoice_id": 123,
+            "customer_name": "John Cooper",
+            "amount": 1399.99,
+            "today": "Today",
+        }
+        html = template.render(context)
+        pdf = render_to_pdf('invoice.html', context)
+        if pdf:
+            response = HttpResponse(pdf, content_type='application/pdf')
+            filename = "Invoice_%s.pdf" %("12341231")
+            content = "inline; filename='%s'" %(filename)
+            download = request.GET.get("download")
+            if download:
+                content = "attachment; filename='%s'" %(filename)
+            response['Content-Disposition'] = content
+            return response
+        return HttpResponse("Not found")
+	
+Step 2: create a utils.py inside the app
+from io import BytesIO
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
+
+def render_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html  = template.render(context_dict)
+    result = BytesIO()
+    pdf = pisa.pisaDocument(BytesIO(html.encode("ISO-8859-1")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), content_type='application/pdf')
+    return None
+
+Step 3:urls.py
+path('pdf/',views.GeneratePDF.as_view()),
+</pre>
+Output:
+
+![pdfop](https://user-images.githubusercontent.com/59610617/129466279-22e531eb-5202-4587-b663-e2b78cf4d984.png)<br>
+
+
 <a name="twenty_six"><h2>2.24 Django Crispy Forms</h2></a><br>
 What is django crispy forms?<br>
 Django-crispy-forms is an application that helps to manage Django forms. It allows adjusting forms' properties (such as method, send button or CSS classes) on the backend without having to re-write them in the template.<br>
