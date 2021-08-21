@@ -1813,7 +1813,7 @@ from .models import Student
 
 class StudentList(ListView):
     model=Student
-    template_name = 'school/student.html'
+    template_name = 'school/student.html'	#default name is student_list.html
     context_object_name = 'students'
 
     def get_template_names(self):
@@ -1832,12 +1832,12 @@ class StudentList(ListView):
 # return render(request,'demo.html',context)
 
 VARIABLES:
-1)To change the name of the _list add one line after model=Student
+1)Default name is student_list.html. To change the name of the _list add one line after model=Student
 template_name_suffix='_get', now it'll search for student_get
 
 2)To give custom name to the template
 template_name="school/student.html"
-now we can use both student_list oe student both will work 
+now we can use both student_list or student both will work 
 custom one has high priority over default one if both custom and default present then custom will get the priority
 
 3)To change the ordering eg order by name then use
@@ -1870,7 +1870,7 @@ def get_template_names(self):
         return [tempmate_name]
 	
 Step 2: students.html
-  {% for s in students%}        //Or use object_list both will work
+  {% for s in students%}        //Default is student_list & object_list both will work, but we've given context_object as students
   {{s.name}}
   {{s.roll}}
   {%endfor%}
@@ -1891,9 +1891,9 @@ from django import forms
 
 # Create
 class StudentEdit(CreateView):			#this will create a form and accept data as well
-    model=Student
+    model=Student				#createview will create a form with the given fields but won't create submit button we've to add it ourself in html.
     fields=['name','roll']
-    success_url = 'thanks'
+    success_url = 'thanks'			
     
     def get_form(self):         #copy same form for update
         form = super().get_form()
@@ -1907,7 +1907,15 @@ class StudentEdit(CreateView):			#this will create a form and accept data as wel
 class StudetUpdate(UpdateView):		#this will update the data 
     model=Student
     fields=['name','roll']
-    success_url = 'thanks'
+    success_url = 'thanks'		#in this we can pass function too 
+   
+[
+success_url = 'display'
+def display(request):
+    return HttpResponse("Registered!!")
+ 
+ path('display/',views.display,name="display")
+]
 
 class ThanksTemplateView(TemplateView):
     template_name = 'school/thanks.html'
@@ -1918,7 +1926,7 @@ Step 2: student_form.html	#this name must be same if we want different name use 
   &lt;form action="" method="POST"&gt;
   {% csrf_token %}
   {{form.as_p}}
-  &lt;input type="submit" value="Submit"&gt;
+  &lt;input type="submit" value="Submit"&gt;		#createview creating input fields but not button that's why we've given button here
   &lt;/form&gt;
  
 Step 3: urls.py
@@ -1937,7 +1945,7 @@ from django import forms
 class StudentForm(froms.ModelForm):
 	class Meta:
 	model = Student
-	fields = ['name','roll']
+	fields = ['name','roll']	#or fields = '__all__'
         widgets={'name':forms.TextInput(attrs={'class':'myclass'}), 'roll':
 	forms.PasswordInput(attrs={'class':'myclass'})}
 
@@ -1964,7 +1972,15 @@ Step 3: create urls
     path('update/<int:pk>',views.StudetUpdate.as_view()),
     path('update/thanks',views.ThanksTemplateView.as_view()),
 </pre>
-
+Lecture notes:
+<pre>
+  {% for i in student_list%}
+  {{i.name}}
+  &lt;a href = "update/{{i.id}}"&gt;Edit&lt;/a&gt;
+  {% endfor %}
+  
+path('list/update/<int:pk>',views.StudetUpdate.as_view()),
+</pre>
 
 
 
