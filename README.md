@@ -24,6 +24,8 @@
 [<p>2.17 Class Based Views (CBV)</p>](#nineteen)
 [<p>2.18 Django File Upload</p>](#twenty)
 [<p>2.19 Django CRUD Operations</p>](#twenty_one)
+<li>Crud using model form: code in models form.txt and output in output.doc</li>
+
 [<p>2.20 Django Middleware</p>](#twenty_two)
 [<p>2.21 How to Send Email in a Django</p>](#twenty_three)
 [<p>2.22 Outputting CSV with Django</p>](#twenty_four)
