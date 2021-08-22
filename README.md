@@ -40,6 +40,7 @@ https://simpleisbetterthancomplex.com/tutorial/2016/08/08/how-to-export-to-pdf.h
 [<p>2.30 Introduction to REST API(Restful Services)</p>](#thirty_two)
 [<p>2.31 Connect with MySql</p>](#thirty_three)
 [<p>2.32 Connecting with PostgreSql(Restful Services)</p>](#thirty_four)
+[<p>2.33 Authentication(Login/Logout)</p>](#thirty_seven)
 [<p>List of errors when performing the practical</p>](#thirty_five)
 [<p>Extra</p>](#thirty_six)
 
@@ -2247,6 +2248,65 @@ Now if we check the djangoProject database we'll get all the migrated tables.
 
 </pre>
 <a name="thirty_four"><h2>2.32 Connecting with PostgreSql</h2></a><br>
+<a name="thirty_seven"><h2>1.34 Authentication(Login/Logout)</h2></a><br>
+<pre>
+urls.py
+urlpatterns = [
+    path('',views.index, name="home"),
+    path('login',views.loginuser, name="login"),
+    path('logout',views.logoutuser, name="logout"),
+]
+
+views.py
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib.auth import logout, authenticate, login
+
+def index(request):
+    if request.user.is_anonymous:
+        return redirect("/login")
+    return render(request,'index.html')
+
+def loginuser(request):
+    if request.method=="POST":
+        username=request.POST.get('username')
+        password=request.POST.get('password')
+        #check if user has correct credential
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            # A backend authenticated the credentials
+            return redirect("/")
+        else:
+            # No backend authenticated the credentials
+            return render(request,'login.html')
+
+    return render(request,'login.html')
+
+def logoutuser(request):
+    logout(request)
+    return redirect("/login")
+    
+login.html
+  &lt;form method="post" action="/login"&gt;
+  {% csrf_token %}
+    &lt;h1 class="h3 mb-3 fw-normal"&gt;Please sign in&lt;/h1&gt;
+    &lt;label for="inputEmail" class="visually-hidden"&gt;Username&lt;/label&gt;
+    &lt;input type="text" id="inputEmail" class="form-control" name='username' placeholder="Username" required="" autofocus=""&gt;
+    &lt;label for="inputPassword" class="visually-hidden"&gt;Password&lt;/label&gt;
+    &lt;input type="password" id="inputPassword" name='password' class="form-control" placeholder="Password" required=""&gt;
+    &lt;button class="w-100 btn btn-lg btn-primary" type="submit"&gt;Sign in&lt;/button&gt;
+  &lt;/form&gt;
+  
+ 
+index.html
+&lt;body&gt;
+	Welcome {{request.user}}
+	&lt;a href="/logout"&gt;Logout&lt;/a&gt;
+	&lt;img src="/static/beach.jpg"&gt;
+&lt;/body&gt;
+</pre>
+
 <a name="thirty_five"><h2>List of errors when performing the practical</h2></a><br>
 Error in fiels:
 <pre>
