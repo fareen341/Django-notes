@@ -41,6 +41,7 @@ https://simpleisbetterthancomplex.com/tutorial/2016/08/08/how-to-export-to-pdf.h
 [<p>2.31 Connect with MySql</p>](#thirty_three)
 [<p>2.32 Connecting with PostgreSql(Restful Services)</p>](#thirty_four)
 [<p>2.33 Authentication(Login/Logout)</p>](#thirty_seven)
+[<p>2.34 Aggregate functions</p>](#thirty_eight)
 [<p>List of errors when performing the practical</p>](#thirty_five)
 [<p>Extra</p>](#thirty_six)
 
@@ -2305,6 +2306,33 @@ index.html
 	&lt;a href="/logout"&gt;Logout&lt;/a&gt;
 	&lt;img src="/static/beach.jpg"&gt;
 &lt;/body&gt;
+</pre>
+
+<a name="thirty_eight"><h2>2.34 Aggregate functions</h2></a><br>
+<pre>
+views.py
+from django.db.models import Avg, Sum, Max, Min, Count
+from django.shortcuts import render
+
+def home(request):
+    stu_data =Student.objects.all()
+    avg = stu_data.aggregate(Avg('marks'))
+    sum = stu_data.aggregate(Sum('marks'))
+    max = stu_data.aggregate(Max('marks'))
+    min = stu_data.aggregate(Min('marks'))
+    count = stu_data.aggregate(Count('marks'))
+    context = {'stu_data':stu_data, 'avg':avg, 'sum':sum, 'max':max, 'min':min, 'count':count}
+    return render(request, 'index.html', context)
+    
+urls.py
+path('home/',views.home) 
+
+index.html
+&lt;h1&gt;Avg={{avg.marks__avg}}&lt;/h1&gt;
+&lt;h1&gt;Sum={{sum.marks__sum}}&lt;/h1&gt;
+&lt;h1&gt;Min={{min.marks__min}}&lt;/h1&gt;
+&lt;h1&gt;Max={{max.marks__max}}&lt;/h1&gt;
+&lt;h1&gt;Count={{count.marks__count}}&lt;/h1&gt;
 </pre>
 
 <a name="thirty_five"><h2>List of errors when performing the practical</h2></a><br>
