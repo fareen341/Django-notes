@@ -1655,6 +1655,113 @@ What is Template Filter?<br>
 How to Create Customized Template Filters?<br>
 
 <a name="seventeen"><h2>2.15 Session Management in Django</h2></a><br>
+
+<h3>Cookie</h3>
+Cookies are text files with small pieces of data — like a username and password — that are used to identify your computer as you use a computer network.<br>
+Example: whenever user visit amazon and made some added some product in cart, then when next time he'll visit he'll get the setting preferences he made last time plus all cart items, which is done using cookie.<br>
+
+set_cookies(): parameters<br>
+max_age(): example: set_cookie("name","fareen",max_age=60*60*24*10)  //10 days <br> 
+expires: set_cookie("name","fareen",expires=datetime.utcnow()+timedelta(days=2)) <br>
+path: path can be root or mydir<br>
+example: set_cookie("name","fareen", "/") , <br>
+set_cookie("name","fareen", "/home")<br> 
+domain: example: set_cookie("name","fareen", "www.mysubdomain.com") <br>
+secure: when its True, will transmitted over https<br>
+
+<pre>
+urls.py
+from cookieapp import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('set/',views.setcookie),
+    path('get/',views.getcookie),
+    path('del/',views.delcookie),
+]
+
+views.py
+from django.shortcuts import render
+from datetime import datetime, timedelta
+
+#setting cookie
+def setcookie(request):
+    response=render(request,'set.html')
+    response.set_cookie('name','sonal',expires=datetime.utcnow()+timedelta(days=2))  
+    #instead of expires we can give max_age=60 i.e 1 minute it always take in seconds
+    #by default age is when browser closed if we dont provide expire ans maxage parameter
+    return response
+
+#getting cookie
+def getcookie(request):
+    name=request.COOKIES.get('name',"guest") 		    #when the key is not set, default is none else it'll show guest
+    return render(request, 'get.html',{'name':name})
+    
+#deleting cookie
+#we can give expire age or delete ourself
+def delcookie(request):
+    response=render(request,'del.html')
+    response.delete_cookie('name')
+    return response
+   
+set.html
+&lt;h1&gt;Cookie set successfully&lt;/h1&gt;
+
+get.html
+&lt;h1&gt;{{name}}&lt;/h1&gt;
+
+del.html
+&lt;h1&gt;Cookie deleted successfully&lt;/h1&gt;
+</pre>
+
+<b>GET SIGNED COOKIE</b>
+<pre>
+views.py
+from django.shortcuts import render
+from datetime import datetime, timedelta
+
+def setcookie(request):
+    response=render(request,'set.html')
+    response.set_signed_cookie('name','sonal', salt="nm", expires=datetime.utcnow()+timedelta(days=2))  
+    return response
+
+def getcookie(request):
+    name=request.get_signed_cookie('name', salt="nm")
+    return render(request, 'get.html',{'name':name})
+
+def delcookie(request):
+    response=render(request,'del.html')
+    response.delete_cookie('name')
+    return response
+</pre>
+
+<h4>Cookie Limitation</h4>
+<li>Each cookie can contain 4096 bytes data.</li>
+
+<h1>SESSION</h1>
+<li>Data store in server not in clients machine. Client machine has session id. Session is more secured than cookie cuz data is not saved in clients machine. </li>
+<li>By default, django stores sessions in your database. So we need to migrate command.</li>
+<li>Types: 1)database-backed sessions, 2)file-based sessions, 3)cookie-based sessions 4)cached sessions.</li>
+Make sure we have session in settings.py inside installed apps and also in middleware
+<pre>
+run migrate command
+
+</pre>
+On client machine data will not be saved instead it save session id.
+
+![session](https://user-images.githubusercontent.com/59610617/131088089-1392b0c4-51f6-4669-865b-613d31e850b7.png)
+<br>
+
+
+
+
+
+
+
+
+
+
+
 <a name="eighteen"><h2>2.16 Authentication & Authorization</h2></a><br>
 Authentication vs Authorization:<br>
 Authentication confirms that users are who they say they are.Example username & password<br>
