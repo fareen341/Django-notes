@@ -1748,9 +1748,140 @@ run migrate command
 
 </pre>
 On client machine data will not be saved instead it save session id.
+<pre>
+views.py
+def setsess(request):
+    request.session['name']='sonal'
+    request.session['age']=24
+    request.session.set_expiry(100)
+    #it'll expire in 100 seconds, make it 0 to expire it on browser close, if we dont give any expiry the default age is 2 weeks
+    #this expiry date will expire the session but the data will be there in database session which will keep increasing and fill our database, to clear it we'll use 
+    return render(request, 'setsession.html')
+    
+def getsess(request):
+    name=request.session.get('name',default='Guest') 
+    return render(request, 'getsession.html',{'name':name, 'age':age}) #,'items':items}
 
+def delsess(request):
+    request.session.flush()
+    request.session.clear_expired() 
+    #flush will delete the expired session from client, but it wont delete from db to delete it from db use clear session 
+    return render(request, 'delsession.html')
+    
+set.html
+session set successfully
+
+get.html
+{{name}}
+
+del.html
+session deleted successfully
+
+</pre>
 ![session](https://user-images.githubusercontent.com/59610617/131088089-1392b0c4-51f6-4669-865b-613d31e850b7.png)
 <br>
+
+<h3>Session methods</h3>
+1)keys() 
+2)items()
+3)clear()
+4)setdefault()
+5)flush(): it deletes the current seesion data from the session and delete the session cookie.
+<pre>
+def getsess(request):
+    name=request.session.get('name',default='Guest')
+    keys=request.session.keys()
+    items=request.session.items()
+    city = request.session.setdefault('city','Mumbai')
+    return render(request, 'getsession.html',{'name':name, 'keys':keys, 'items': items, 'city':city}) #,'items':items}
+    
+index.html
+    {% for i in items %}
+    {{i}}
+    {% endfor %}
+
+    &lt;hr&gt;    
+    {% for key in keys %}
+    {{key}}
+    {% endfor %}
+    &lt;hr&gt;
+</pre>
+
+![ss1](https://user-images.githubusercontent.com/59610617/131121744-c12d3a30-1375-4159-9335-82b54b99e99f.png)<br>
+
+<h3>Methods to check the session information</h3>
+<pre>
+we can either write it in .html file or in view ans pass the key in html
+Method 1: in index.html
+    {{request.session.get_session_cookie_age}}<br>
+    {{request.session.get_expiry_age}}<br>
+    {{request.session.get_expiry_date}}<br>
+    {{request.session.get_expire_at_browser_close}}<br>
+
+Method 2:
+views.py
+def getsess(request):
+    name=request.session.get('name')
+    keys=request.session.keys()
+    items=request.session.items()
+    city = request.session.setdefault('city','Mumbai')
+    cookie_age=request.session.get_session_cookie_age()
+    exp=request.session.get_expiry_age()
+    exp_date=request.session.get_expiry_date()
+    browser_close=request.session.get_expire_at_browser_close()
+    return render(request, 'getsession.html',{'name':name, 'keys':keys, 'items': items, 'city':city, 'cookie_age':cookie_age, 'exp':exp,'exp_date':exp_date, 'browser_close': browser_close }) #,'items':items}
+
+index.html
+    {{cookie_age}}&lt;hr&gt;
+    {{exp}}&lt;hr&gt;
+    {{exp_date}}&lt;hr&gt;
+    {{browser_close}}&lt;hr&gt;  
+</pre>
+
+<h3>Testing cookie</h3>
+To test cookie the client browser support or not we can use these methods.
+<pre>
+views.py
+
+#this will set the cookie
+def setsess(request):
+    request.session.set_test_cookie()
+    return render(request, 'setsession.html')
+
+#checking does the clint browser support the cookie or not
+def getsess(request):    
+    test=request.session.test_cookie_worked()
+    return render(request, 'getsession.html',{'test':test}) #,'items':items}
+
+#after checking deeting it
+def delsess(request):
+    request.session.delete_test_cookie()   
+    return render(request, 'delsession.html')
+   
+set.html
+cookie set successfully
+
+get.html
+{{test}}
+
+del.html
+cookie deleted successfully
+</pre>
+The cookie age is 2 weeks but we want to to expire in 3 days then we should set expiry date.<br>
+
+![cookie](https://user-images.githubusercontent.com/59610617/131129086-59f745f2-eb97-4b20-9859-3de8d0ce0b23.png)<br>
+
+<h3>Overriding the default settings</h3>
+<pre>
+</pre>
+
+
+
+
+
+
+
+
 
 
 
