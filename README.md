@@ -33,7 +33,6 @@
 https://simpleisbetterthancomplex.com/tutorial/2016/08/08/how-to-export-to-pdf.html
 [<p>2.24 Django Crispy Forms</p>](#twenty_six)
 [<p>2.25 GIT & Github</p>](#twenty_seven)
-[<p>2.26 Bitbucket</p>](#twenty_eight)
 [<p>2.27 Deploying Django Apps & Heroku</p>](#twenty_nine)
 [<p>2.28 Introduction to Web Services</p>](#thirty)
 [<p>2.29 Introduction to XML</p>](#thirty_one)
@@ -2464,11 +2463,14 @@ customer_email = forms.EmailField(validators=[validate_domainonly_email], max_le
 
 
 <a name="twenty_seven"><h2>2.25 GIT & Github</h2></a><br>
-<a name="twenty_eight"><h2>2.26 Bitbucket</h2></a><br>
+follow git-commands repo.
 <a name="twenty_nine"><h2>2.27 Deploying Django Apps & Heroku</h2></a><br>
+Steps given in heroku.txt
 <a name="thirty"><h2>2.28 Introduction to Web Services</h2></a><br>
 <a name="thirty_one"><h2>2.29 Introduction to XML</h2></a><br>
+PENDING
 <a name="thirty_two"><h2>2.30 Introduction to REST API(Restful Services)</h2></a><br>
+follow django-drf repo.
 <a name="thirty_three"><h2>2.31 Connecting with Mysql</h2></a><br>
 <pre>
 Step 1:
