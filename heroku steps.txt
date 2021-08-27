@@ -1,0 +1,41 @@
+step1 :heroku login
+step2 :git init
+step3 :make commit
+step4 :heroku create <app name>
+step5 :heroku git:remote -a <app name>
+step6 :make gunicorn ->create Procfile ->add this line (web: gunicorn app_name.wsgi)
+step7 : add requirement file ->pip freeze > requirements.txt
+step8 :dont forget to add static dir in settings ->(STATIC_ROOT=os.path.join(BASE_DIR,'staticfiles'))
+step9 :add host in settings.py (['','127.0.0.1'])
+step9 :make commit
+step10 :git push heroku master
+
+
+WITH DB:
+we need psycopg2 , install it
+step 1:make changes in settings.py add following things
+Go to heroku and add postgresql ->config vars ->copy the credentials and add it in setting.py
+
+'ENGINE':'django.db.backends.postgressql',
+'NAME':'', which is always at the end after /
+'HOST':'', start at @ to amazonaws.com
+'PORT':5432, (given on the credential)
+'USERNAME':'', after the : and before the colon
+'PASSWORD':'' before the :
+
+step2: python manage.py migrate
+step3 : commit
+step4 :git push heroku master
+
+WITH STATIC FILE:
+step1 : add static file(the same step we do to add static folder in settings.py) 
+step2 : install whitenoise
+step3 : pip freeze > requirements.txt
+step4 : add whitenoise in middlewere ('whitenoise.middleware.WhiteNoiseMiddleware')
+step5 :git commit
+step6 :git push heroku master
+
+AT LAST CHANGE THE DEBUG TO FALSE
+debug : FALSE
+
+
