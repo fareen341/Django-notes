@@ -1873,6 +1873,18 @@ The cookie age is 2 weeks but we want to to expire in 3 days then we should set 
 
 <h3>Overriding the default settings</h3>
 <pre>
+in settings.py
+
+SESSION_COOKIE_AGE = 400 #default is 2 weeks
+SESSION_COOKIE_NAME = "sessionname"   
+SESSION_COOKIE_PATH = "/home"
+SESSION_COOKIE_HTTPONLY = True   #default=true, this will stop client side javascript to access cookie and this will secure 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  #default is False, if True on browset close it'll expire
+
+For file based:
+SESSION_COOKIE_SECURE =True     # in this case it sholud be https
+SESSION_ENGINE = 'django.contrib.sessions.backends.file' #default is db based, we overrite it to make it file based
+SESSION_FILE_PATH = '/home'
 </pre>
 
 
