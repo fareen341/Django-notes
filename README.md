@@ -1656,9 +1656,10 @@ How to Create Customized Template Filters?<br>
 <a name="seventeen"><h2>2.15 Session Management in Django</h2></a><br>
 
 <h3>Cookie</h3>
-Cookies are text files with small pieces of data — like a username and password — that are used to identify your computer as you use a computer network.<br>
-Example: whenever user visit amazon and made some added some product in cart, then when next time he'll visit he'll get the setting preferences he made last time plus all cart items, which is done using cookie.<br>
+Cookies are text files with small pieces of data — like a username and password — that are used to identify your computer as you use a computer network. With response we set cookie and request uto get cookie.<br>
+Example: whenever user visit amazon and made some added some product in cart, then when next time he'll visit he'll get the setting preferences he made last time plus all cart items, which is done using cookie.<br><br>
 
+<b>Parameters in set_cookie</b><br>
 set_cookies(): parameters<br>
 max_age(): example: set_cookie("name","fareen",max_age=60*60*24*10)  //10 days <br> 
 expires: set_cookie("name","fareen",expires=datetime.utcnow()+timedelta(days=2)) <br>
@@ -1666,7 +1667,9 @@ path: path can be root or mydir<br>
 example: set_cookie("name","fareen", "/") , <br>
 set_cookie("name","fareen", "/home")<br> 
 domain: example: set_cookie("name","fareen", "www.mysubdomain.com") <br>
-secure: when its True, will transmitted over https<br>
+secure: when its True, will transmitted over https<br><br>
+
+Real life situation where we use cookie see the example here(https://www.tutorialspoint.com/django/django_cookies_handling.htm).<br>
 
 <pre>
 urls.py
@@ -1693,14 +1696,15 @@ def setcookie(request):
 
 #getting cookie
 def getcookie(request):
-    name=request.COOKIES.get('name',"guest") 		    #when the key is not set, default is none else it'll show guest
+    #name=request.COOKIES['name']      #cookie is taking dict key val pair, so both are valid this one and below one
+    name=request.COOKIES.get('name',"not found") 		    #when the key is not set, default is none else it'll show guest
     return render(request, 'get.html',{'name':name})
     
 #deleting cookie
 #we can give expire age or delete ourself
 def delcookie(request):
-    response=render(request,'del.html')
-    response.delete_cookie('name')
+    response=render(request,'del.html')			#if delete response come then only delete cookie
+    response.delete_cookie('name')		
     return response
    
 set.html
@@ -1711,6 +1715,11 @@ get.html
 
 del.html
 &lt;h1&gt;Cookie deleted successfully&lt;/h1&gt;
+</pre>
+
+<b>Create a login form and save cookie information.</b>
+<pre>
+PENDING
 </pre>
 
 <b>GET SIGNED COOKIE</b>
@@ -1741,11 +1750,12 @@ def delcookie(request):
 <li>Data store in server not in clients machine. Client machine has session id. Session is more secured than cookie cuz data is not saved in clients machine. </li>
 <li>By default, django stores sessions in your database. So we need to migrate command.</li>
 <li>Types: 1)database-backed sessions, 2)file-based sessions, 3)cookie-based sessions 4)cached sessions.</li>
+<li>Retriving data is same as retriving data from dict.</li>
 Make sure we have session in settings.py inside installed apps and also in middleware
 <pre>
-run migrate command
-
+run migrate command, cuz session comes with default table which django provides just like users & groups, auth etc
 </pre>
+
 On client machine data will not be saved instead it save session id.
 <pre>
 views.py
@@ -1755,7 +1765,7 @@ def setsess(request):
     request.session.set_expiry(100)
     #it'll expire in 100 seconds, make it 0 to expire it on browser close, if we dont give any expiry the default age is 2 weeks
     #this expiry date will expire the session but the data will be there in database session which will keep increasing and fill our database, to clear it we'll use 
-    return render(request, 'setsession.html')
+    return render(request, 'setsession.html')<br>
     
 def getsess(request):
     name=request.session.get('name',default='Guest') 
@@ -1777,6 +1787,7 @@ del.html
 session deleted successfully
 
 </pre>
+
 ![session](https://user-images.githubusercontent.com/59610617/131088089-1392b0c4-51f6-4669-865b-613d31e850b7.png)
 <br>
 
