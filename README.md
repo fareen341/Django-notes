@@ -2644,3 +2644,11 @@ filter() it will return multiple record
 
 <h2>To add bootstrap form</h2>
 downloaded the bootstrap cdn and paste it in static css folder and link using {% load static %} then in models.py <br>
+
+
+<h2>To change the default table name</h2>
+By default django table name is named as modelName_AppName, Example appname=FoodApp and model=Food. So the name is Food_FoodApp. To change this default name.<br>
+<pre>
+class Meta:
+	db_table="Fooddb"    
+</pre>
