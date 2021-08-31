@@ -624,9 +624,22 @@ return self.name + " " + self.email
 search_fields = ['name','location']	//it will search by name and location
 </pre>
 
+<b>Editable list link</b>
+<pre>
+By default link will be on first object  
+This is link which is used to navigate to the change page, so here i gave roll so link will be on roll page.
+list_display_links=['roll']
+</pre>
+
 <b>Editable list</b>
 <pre>
-editable_list = ['password','city']	//these can be directily editable.
+For this to work, two rules must follow:
+->Any field in list_editable must also be in list_display. You can’t edit a field that’s not displayed!
+->The same field can’t be listed in both list_editable and list_display_links – a field can’t be both a form and a link.
+
+So editable list link has default link on first object, make it None to make list_editable work.
+list_editable = ['name','roll']
+list_display_links=None
 </pre>
 
 <b>Adding filter option</b>
