@@ -680,8 +680,8 @@ With the help of lookup we'll get the filter list visible on the browser.
 ordering=['age'] 
 </pre>
 
-<b>To change admin pswd</b>
-python manage.py changepassword model_name
+<b>To change admin pswd</b><br>
+python manage.py changepassword username
 
 Creating the first model.<br>
 <pre>
