@@ -340,9 +340,9 @@ demo.html
 <b>List of filters</b>:<br>
 {{django | length}} : returns length<br>
 {{djangi | slice:'no. of characters'}} : slice the character eg:3 to display 3 chars<br>
-{{django | truncatechars:'no. of characters'}} : returns the given character and rest all in dot...<br>
+{{django | truncatechars:no. of characters}} : returns the given character and rest all in dot...<br>
 Example: hello world<br>
-{{django | truncatechars:'3'}}<br>
+{{django | truncatechars:3}}<br>
 hell...
 {{django | upper/lower}}<br>
 <b>Using both slice and upper</b><br>
