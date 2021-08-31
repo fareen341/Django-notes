@@ -280,6 +280,16 @@ studentdetail.html
     &lt;h1&gt;RollNo:{{RollNo}}&lt;/h1&gt;
     &lt;h1&gt;data:{{data}}&lt;/h1&gt;       &lt;!--It wont print anything, we access using key--&gt;
     &lt;!--We access name using its key--&gt;
+    
+Pass multiple values: 
+def home(request):
+    d=datetime.datetime.now()
+    num=20
+    return render(request, 'App2/login.html',{'d':d, 'n':num} )
+    
+in .html
+{{d}}
+{{n}}
 </pre>
 
 <b>For loop in view</b>
