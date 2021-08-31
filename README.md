@@ -127,7 +127,7 @@ Creating first app:<br>
 Step 1: Open vscode terminal type >django-admin startapp firstApp	OR	python manage.py startapp thirdApp<br>
 Step 2: Register this app in settings.py file:<br>
 >INSTALLED_APPS = [
-    'firstApp'
+    'firstApp.apps.FirstApp1Config'		#FirstApp1Config : we'll get this from apps.py
 ]
 </pre>
 
