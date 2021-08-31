@@ -351,6 +351,7 @@ hell...
 MORE FILTERS (https://docs.djangoproject.com/en/3.2/ref/templates/builtins/#std:templatefilter-addslashes)
 
 <b>Formating date</b><br>
+More date formats in documentation
 views.py<br>
     p=datetime.datetime.now()<br>
     return render(request,'firstApp/studentdetail.html',{'p':p})<br>
@@ -363,8 +364,17 @@ j=return 1,2,3...910<br>
 DATE_FORMAT: return in format like this: Aug. 1, 2021<br>
 DATE_TIME: return in format like this: SunPMUTCAugust_UTC0AugAugust<br>
 SHORT_DATE_FORMAT: return in format like this: 08/01/2021<br>
+<pre>
+Simplae date format
+{{d | date}}
+
+DATE_FORMAT:
+{{d | date:'Y-m-d'}}
+</pre>
+
 <b>float format</b><br>
-{{django | 'floatformat':'3' }}<br>
+{{django | floatformat:'3' }}<br>
+Example: if the number is 512, {{num | floatformat:3}}, then output is: 512.000 
 
 <b>Conditional statement</b><br>
 <pre>
