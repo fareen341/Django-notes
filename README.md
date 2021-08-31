@@ -398,6 +398,11 @@ Example:
     value is {{s}}
 {%endif%}
 
+Example2: Note: here give space after == or it'll give error
+{% if s == 'fareen' %}
+    value is {{s}}
+{%endif%}
+
 2)if else
 Syntax
 {% if variable is defined %}
@@ -449,13 +454,13 @@ demo.html
 {% endif %}
 </pre>
 
-
 Comments<br>
 <pre>
-Comments look like this:
-
+Single line:
 {# this won't be rendered #}
-A {% comment %} tag provides multi-line comments.
+
+Multi-line:
+{% comment %} A tag provides multi-line comments {% endcomment %}
 </pre>
 
 Creating Template<br>
