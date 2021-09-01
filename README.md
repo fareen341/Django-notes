@@ -9,7 +9,7 @@
 [<p>2.2 Django Web Framework</p>](#four)
 [<p>2.3 Getting Started with Django</p>](#five)
 [<p>2.4 URLs and Views</p>](#six)
-[<p>2.5 URL dispatcher</p>](#seven)
+[<p>2.5 URL dispatcher</p>](F#seven)
 [<p>2.6 Django Templates</p>](#eight)
 [<p>2.7 Working with Static Files</p>](#nine)
 [<p>2.8 DJANGO MODEL</p>](#ten)
@@ -1046,7 +1046,7 @@ The Python Template Engine<br>
 Define Jinja2<br>
 Faker Module<br>
 
-<b>Display model data in html.</b>
+<b>&lt;/b>
 <pre>
 views.py
 def showval(request):
@@ -1054,16 +1054,16 @@ def showval(request):
     return render(request,'index.html', {'data':data})
   
 index.html
-<html>
-<body>
-<form action="" method="POST" novalidate="">
+&lt;html&gt;
+&lt;body&gt;
+&lt;form action="" method="POST" novalidate=""&gt;
     {% for i in data %}
     {{i}}
-    <br>
+    &lt;br&gt;
     {%endfor%}
-</form>
-</body>
-</html>
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 
 Output:
 Product object (1)
