@@ -1046,7 +1046,7 @@ The Python Template Engine<br>
 Define Jinja2<br>
 Faker Module<br>
 
-<b>&lt;/b>
+<b>Show form data in html</b>
 <pre>
 views.py
 def showval(request):
