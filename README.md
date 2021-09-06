@@ -1976,6 +1976,22 @@ admin.site.site_title = "Welcom to fareens dashbord"    #title of the site
 admin.site.index_title = "welcome to this portal"       #After login the the header will be this
 </pre>
 
+<h3>Authentication Views</h3>
+We can get login,logout,password reser, password change etc functionality using authentication provided by django. We can use in both function based and class based.<br>
+By default we get all these urls:<br>
+
+![auth12](https://user-images.githubusercontent.com/59610617/132226389-89c1bf81-51e4-4543-8b76-0dbf6be4d700.png)<br>
+
+To see source code of these files go to: Appdata/local/programs/python/python30-32/lib/site-package/django/contrib/auth/urls.py ->open urls.py , we can customize these code if we need by inheriting it.<br>
+
+Authentication in class based.
+<pre>
+
+
+
+By deafult when we login we get
+</pre>
+
 <a name="nineteen"><h2>2.17 Class Based Views (CBV)</h2></a><br>
 Base Class-Based Views / Base View<br>
 Generic Class-Based Views / Generic View<br>
@@ -2096,9 +2112,10 @@ path('class2/',views.MyClassView.as_view(template_name='index2.html'), name="cla
 Whenever we hit the url, it search for template_name variable and assign the value we given in url which is index1, index2 and pass that to render function.
 </pre>
 
-<h2>Generic Class-Based Views / Generic View<br></h2
+<h2>Generic Class-Based Views / Generic View<br></h2>
 In every application we use CRUD, so django gave some setup code which we can reuse.<br>
 For example when we want to add data we use create view. These are common task which we can use.<br>
+To see more which class inherits which one with diagramatic representation visit: dennisivy.com/post/django-class-based-views/
 1)Display View: ListView, DetailView.<br>
 2)Editing View: FormView, CreateView, UpdateView, DeleteView.<br>
 3)Data View: ArchiveIndexView, YearArchiveView, MonthArchiveView, WeekArchiveView, DayArchiveView,TodayArchiveView, DateDetailView.<br>
@@ -2107,7 +2124,7 @@ For example when we want to add data we use create view. These are common task w
 ListView: page representing a list of objects.<br>
 This view inherits methods and attributes from the following views: django.views.generic.list.MultipleObjectTemplateResponseMixin, django.views.generic.base.TemplateResponseMixin, django.views.generic.list.BaseListView, django.views.generic.list.MultipleObjectMixin, django.views.generic.base.View<br>
 
- 1)ListView:
+ <h4>1)ListView:</h4>
  <pre>
  Step 1: views.py
 from django.views.generic.list import ListView
@@ -2178,12 +2195,97 @@ Step 2: students.html
   {%endfor%}
 </pre>
 
+<h4>2)Details view</h4>
+List view give the list of all object. In details view we get the particular object based on the pk given.
+<pre>
+views.py
+from django.views.generic.detail import DetailView
+
+class StudentDetailsView(DetailView):
+    model = Student
+    
+urls.py
+path('student/<int:pk>',views.StudentDetailsView.as_view())
+
+student_detail.html	//this name must be same to change see the above example.
+{{student.id}}  <!--Same name as model name-->
+{{student.name}} 
+{{student.roll}} 
+{{student.marks}} 
+
+#VARIABLES:
+Some variable defined above can be used in details view. SOme more variable available are:
+1)pk_url_kwarg:
+By default in urls we should use pk, but in case we want to use id then we'll use this variable, Example:
+views:
+class StudentDetailsView(DetailView):
+    model = Student
+    pk_url_kwarg = 'id'
+ 
+ urls:
+path('student/<int:id>',views.StudentDetailsView.as_view())
+</pre>
+
+Listview and details view together with url.
+<pre>
+views.py
+class StudentList(ListView):
+    model = Student
+
+class StudentDetailsView(DetailView):
+    model = Student
+
+urls.py
+path('student/',views.StudentList.as_view()),
+path('student/<int:pk>',views.StudentDetailsView.as_view(), name='studentdetail')
+
+student_list.html
+  {% for i in student_list%}
+  {{i.name}}<a href = {% url 'studentdetail' i.id %}>Edit</a><br>
+  {% endfor %}
+ 
+Note: studentdetail is the name given in the url, we must give the name in this url, or it won't work
+
+student_detail.html
+{{student.id}}  <!--Same name as model name-->
+{{student.name}} 
+{{student.roll}} 
+{{student.marks}} 
+</pre>
+
+Both list and details on single page
+<pre>
+views.py
+class StudentDetailsView(DetailView):
+    model = Student
+
+    def get_context_data(self, *args, **kwargs):
+        context =super().get_context_data(*args, **kwargs)
+        context['students'] = Student.objects.all().order_by('name')
+        return context
+
+student_details.html
+{{student.id}}
+{{student.name}} 
+{{student.roll}} 
+{{student.marks}} 
+
+  {% for i in students%}
+  {{i.name}}<a href = {% url 'studentdetail' i.id %}>Edit</a><br>
+  {% endfor %}
+
+Now both list and detail of particular student will be visible on the same page.
+</pre>
+
+![list_detail](https://user-images.githubusercontent.com/59610617/132206824-5ee4ec0c-1cdc-4037-9257-01cc622c9a41.png)<br>
+
 <h3>Editing View</h3>
 
 ![updateview](https://user-images.githubusercontent.com/59610617/129467693-177ab80f-f51e-4560-bad9-7fa84fa959e7.png)<br>
 
+<h4>1)Create and Update</h4>
 <pre>
-METHOD 1:
+METHOD 1: use get_form to give css class to form
 
 Step 1: views.py
 from django.views.generic.base import TemplateView
@@ -2204,13 +2306,16 @@ class StudentEdit(CreateView):			#this will create a form and accept data as wel
         widgets={'name':forms.TextInput(attrs={'class':'myclass'})}
         return form,widgets
 
+get_form is useful if we want to apply some css class
 
 #update based on pk
 class StudetUpdate(UpdateView):		#this will update the data 
     model=Student
     fields=['name','roll']
-    success_url = 'thanks'		#in this we can pass function too 
-   
+    success_url = '/thanks/'		#in this we can pass function too 
+
+We dont have to create another form for update we can use the same form student_form which we'll get with data, to update. <b>But if we give custom form then we must give form name in update and create, using template_name variable.</b> Also if we want css class in update too then we should use get_form in method in update class also.
+
 [
 success_url = 'display'
 def display(request):
@@ -2234,12 +2339,11 @@ Step 2: student_form.html	#this name must be same if we want different name use 
 Step 3: urls.py
     path('',views.StudentEdit.as_view()),
     path('thanks',views.ThanksTemplateView.as_view()),
-    path('update/thanks',views.ThanksTemplateView.as_view()),
     path('update/<int:pk>',views.StudetUpdate.as_view())
     
-    
+<hr>
 
-METHOD 2:
+METHOD 2: use forms.py to give css class to form
 Step 1: forms.py create django model form
 from .models import Student
 from django import forms
@@ -2251,6 +2355,8 @@ class StudentForm(froms.ModelForm):
         widgets={'name':forms.TextInput(attrs={'class':'myclass'}), 'roll':
 	forms.PasswordInput(attrs={'class':'myclass'})}
 
+Now we'll get css class in both create and update, in the above example we were giving the get_form method for both create and update
+
 Step 2: views.py
 #form create
 class StudentCreateView(CreateView):		#import create view first
@@ -2259,21 +2365,24 @@ class StudentCreateView(CreateView):		#import create view first
 	success_url = 'thanks'
 
 #for update
-class StudentUpdateView(CreateView):		#import create view first
-	model = Student
-	form_class = StudentForm
-	template_name = 'school/student_form.html'
-	success_url = 'update/thanks'
+class StudentUpdateView(UpdateView):		#import create view first
+	model = Student					#here we have to give model name or it'll give error
+	form_class = StudentForm			#here give form name
+	template_name = 'school/student_form.html'	#here we have to give template name , in the above method it take default student_form.html
+	success_url = '/thanks/'
 
 class ThanksTemplateView(TemplateView):
     template_name = 'school/thanks.html'
 	
 Step 3: create urls
     path('',views.StudentCreateView.as_view()),
-    path('thanks',views.ThanksTemplateView.as_view()),
+    path('thanks/',views.ThanksTemplateView.as_view()),
     path('update/<int:pk>',views.StudetUpdate.as_view()),
-    path('update/thanks',views.ThanksTemplateView.as_view()),
+    
 </pre>
+
+![createview](https://user-images.githubusercontent.com/59610617/132216922-cef0f02d-de7c-4076-9f83-fc0abd68b6b6.png)<br>
+
 Lecture notes:
 <pre>
   {% for i in student_list%}
@@ -2284,42 +2393,65 @@ Lecture notes:
 path('list/update/<int:pk>',views.StudetUpdate.as_view()),
 </pre>
 
+<h4>FormView</h4>
+To get the form we use formview
+<pre>
+views.py
+from django.views.generic.edit import FormView
 
+class StudentFormView(FormView):
+    template_name = 'school/view.html'
+    form_class = StudentForm
+    # success_url = '/thanks/'
+    def form_valid(self,form):
+        return HttpResponse('msg sent')
 
+Here we can either write success_url or http response
+We only created a form data is not getting saved into database, we can write datbase code inside form_valid function
 
+forms.py
+from django import forms
+from .models import Student
 
+class StudentForm(forms.Form):
+    name = forms.CharField(max_length=20)
+    roll=forms.IntegerField()
+    marks = forms.IntegerField()
 
+urls.py
+    path('student/',views.StudentFormView.as_view(), name='student'),
+    path('thanks/',views.ThanksTemplateView.as_view()),
+   
+view.html
+ &lt;form action="" method="POST"&gt;
+  {% csrf_token %}
+ {{form.as_p}}
 
+  &lt;input type="submit" value="Submit"&gt;
+  &lt;/form&gt;
+</pre>
 
+<h4>2)Delete view</h4>
+<pre>
+urls.py
+path('delete/<int:pk>', views.StudentDeleteView.as_view()), 
+path('thanks/',views.ThanksTemplateView.as_view()),
 
+views.py
+from django.views.generic.edit import DeleteView
 
-
-
-
-
-
-
-PENDING
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+class StudentDeleteView(DeleteView):
+    model = Student
+    success_url = '/thanks/'
+ 
+student_confirm_delete.html        #this name should be same or use template_name to change
+  Are you sure?&lt;br&gt;
+  &lt;form action="" method="POST"&gt;
+  {% csrf_token %}
+    &lt;input type="submit" value="Delete"&gt;
+    &lt;a href={% url 'student' %}>Cancel&lt;/a&gt;
+  &lt;/form&gt;
+</pre>
 
 <a name="twenty"><h2>2.18 Django File Upload</h2></a><br>
 <a name="twenty_one"><h2>2.19 Django CRUD Operations</h2></a><br>
