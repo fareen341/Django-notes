@@ -1986,10 +1986,67 @@ To see source code of these files go to: Appdata/local/programs/python/python30-
 
 Authentication in class based.
 <pre>
+urls.py
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/profile/', vw.ProfileTemplate.as_view(), name='profile'),
+
+<hr>
+
+views.py
+from django.shortcuts import render
+from django.views.generic import TemplateView
+
+# Create your views here.
+class ProfileTemplate(TemplateView):
+    template_name = 'registration/profile.html'
+   
+<hr>
+
+profile.html 		//name should be profile.html to change it we have to change redirect urls in settings.py, see below
+
+ &lt;h1&gt;Profile page&lt;/h1&gt;
+ &lt;a href={% url 'logout' %}&gt;Logout&lt;/a&gt;&lt;br&gt;
+ &lt;a href={% url 'password_change' %}&gt;Change password&lt;/a&gt;
+
+<hr>
+
+ &lt;input type="submit" value="Submit"&gt;
+ &lt;a href={% url 'password_reset' %}&gt;Reset password?&lt;/a&gt;&lt;br&gt;
+ &lt;!--In production env we'll get the password reset link on the email we gave--&gt;
+ &lt;/form&gt;
+
+<hr>
+
+settings.py
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+We'll get email on console, to use in production we have to configure email:
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Password reset on 127.0.0.1:8000
+From: webmaster@localhost
+To: fareen@gmail.com
+Date: Mon, 06 Sep 2021 14:17:54 -0000
+Message-ID:
+ <163093787471.2352.7997546904022098454@LAPTOP-2B3KPDEV.www.tendawifi.com>
 
 
+You're receiving this email because you requested a password reset for your user account at 127.0.0.1:8000.
 
-By deafult when we login we get
+Please go to the following page and choose a new password:
+
+http://127.0.0.1:8000/accounts/reset/MQ/5tt-272428f97471926eecb5/
+
+Your username, in case you’ve forgotten: fareen
+
+Thanks for using our site!
+
+<hr>
+
+By deafult when we login we get redirected to profile page to change:
+settings.py
+LOGIN_REDIRECT_URL = "/"
 </pre>
 
 <a name="nineteen"><h2>2.17 Class Based Views (CBV)</h2></a><br>
