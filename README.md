@@ -2199,13 +2199,13 @@ class StudentList(ListView):
             tempmate_name =self.template_name
         return [tempmate_name]
 
-#after running the applictaion it'll show template does'nt exist school/student_list.html the same template we have to make
-# this code has student_list key which we cant see and in html we'll pass it
+after running the applictaion it'll show template does'nt exist school/student_list.html the same template we have to make
+this code has student_list key which we cant see and in html we'll pass it
 
-# instead of all these lines we're only writing one line
-# stud=Student.objects.all()
-# context={'student_list':stud}     This student_list key will be passed to html
-# return render(request,'demo.html',context)
+instead of all these lines we're only writing one line
+stud=Student.objects.all()
+context={'student_list':stud}     This student_list key will be passed to html
+return render(request,'demo.html',context)
 
 VARIABLES:
 1)Default name is student_list.html. To change the name of the _list add one line after model=Student
@@ -2304,7 +2304,7 @@ student_list.html
 Note: studentdetail is the name given in the url, we must give the name in this url, or it won't work
 
 student_detail.html
-{{student.id}}  <!--Same name as model name-->
+{{student.id}} 			//Same name as model name
 {{student.name}} 
 {{student.roll}} 
 {{student.marks}} 
