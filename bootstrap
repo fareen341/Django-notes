@@ -1,3 +1,6 @@
+Note: dont forget to include all the fields or this method will not work
+
+
 {% load crispy_forms_tags %}
 <div class="container">
  	<form method="post" novalidate="">
