@@ -1599,6 +1599,15 @@ index.html
     &lt;/div&gt;
   {% endfor %}
 {% endif %}
+
+In class based view
+from django.contrib.messages.views import SuccessMessageMixin
+
+class ProductView(SuccessMessageMixin,CreateView):
+    form_class = ProductDetailsForm
+    template_name = "add_product.html"
+    success_url = reverse_lazy('addproducts')
+    success_message = "Product Added!!"
 </pre>
 
 <a name="thirteen"><h2>2.11 Django Form Validation</h2></a><br>
