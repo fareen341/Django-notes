@@ -796,6 +796,9 @@ If we won't create the media_url, then the files will be upload to the current r
 
 Step 4:
 In urls.py add the following line:
+from django.conf import settings
+from django.conf.urls.static import static
+
 if settings.DEBUG:		//for developer mode
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
