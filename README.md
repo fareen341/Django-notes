@@ -1593,10 +1593,10 @@ from django.contrib import messages
 index.html
 {% if messages %}
   {% for message in messages %}
-    <div class="alert alert-{{ message.tags }} alert-dismissible fade show my=0" role="alert">
+    &lt;div class="alert alert-{{ message.tags }} alert-dismissible fade show my=0" role="alert"&gt;
     {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+    &lt;button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">&lt;/button&gt;
+    &lt;/div&gt;
   {% endfor %}
 {% endif %}
 </pre>
