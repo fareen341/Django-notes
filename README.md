@@ -2343,7 +2343,7 @@ student_details.html
 {{student.marks}} 
 
   {% for i in students%}
-  {{i.name}}<a href = {% url 'studentdetail' i.id %}>Edit</a><br>
+  {{i.name}}&lta href = {% url 'studentdetail' i.id %}&gt;Edit&lt;/a&gt;&lt;br&gt;
   {% endfor %}
 
 Now both list and detail of particular student will be visible on the same page.
