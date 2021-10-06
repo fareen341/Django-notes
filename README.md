@@ -804,6 +804,9 @@ if settings.DEBUG:		//for developer mode
 
 Note: we need to make some changes in form if the data coming from form. For model above steps will work.
 
+Step 5: don't forget to add enctype in html form or image won't be uploaded
+	form action="" method="POST" enctype="multipart/form-data"
+
 Follow Steps : https://simpleisbetterthancomplex.com/tutorial/2016/08/01/how-to-upload-files-with-django.html
 
 </pre>
