@@ -921,7 +921,7 @@ To filter based on text search:
 <QuerySet [<Contact: fareen>, <Contact: sam>]>
 
 ADDING DATA:
-We can add and edit the record in db using filters.
+We can add and edit the record in db using create.
 To add the record 
  joe = Address.objects.create(email="Joe@123",city="mumbai").save()		//it'll without save() too
 </pre>
