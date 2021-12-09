@@ -77,6 +77,12 @@ DATABASES = {
 }
 </pre>
 
+# To check the logs:
+In the same app path enter command: heroku logs
+
+# To check n lines of logs:
+$ heroku logs -n 10
+
 
 # Command to Install psycopg2 for postgres in ubuntu<br>
 $ sudo apt-get install python3-psycopg2
