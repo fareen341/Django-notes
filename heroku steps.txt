@@ -16,7 +16,7 @@ we need psycopg2 , install it
 step 1:make changes in settings.py add following things
 Go to heroku and add postgresql ->config vars ->copy the credentials and add it in setting.py
 
-'ENGINE':'django.db.backends.postgressql',
+'ENGINE':'django.db.backends.postgresql',
 'NAME':'', which is always at the end after /
 'HOST':'', start at @ to amazonaws.com
 'PORT':5432, (given on the credential)
