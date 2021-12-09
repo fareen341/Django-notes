@@ -1,3 +1,6 @@
+CHANGE THE DEBUG TO FALSE
+debug : FALSE
+
 step1 :heroku login
 step2 :git init
 step3 :make commit
@@ -23,11 +26,31 @@ Go to heroku and add postgresql ->config vars ->copy the credentials and add it 
 'USERNAME':'', after the : and before the colon
 'PASSWORD':'' before the :
 
-step2: python manage.py migrate
+step2: python manage.py migrate and superuser command
 step3 : commit
 step4 :git push heroku master
 
+For db:
+Sample database configuration:
+<pre>
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd4pp*****pvv2u',
+        'HOST': 'ec2-54-198-213-75.compute-1.amazonaws.com',
+        'PORT': 5432,
+        'USER': 'eqij*****ump**qx',
+        'PASSWORD': '6682bf3bf**08ee088f0de**************8ed16c2f133**a2aa7958b1'
+    }
+}
+</pre>
+
 WITH STATIC FILE:
+
+For static:
+If we dont need static files just run this command: heroku config:set DISABLE_COLLECTSTATIC=1
+To set collectstatic again use command: heroku config:unset DISABLE_COLLECTSTATIC
+
 step1 : add static file(the same step we do to add static folder in settings.py) 
 step2 : install whitenoise
 step3 : pip freeze > requirements.txt
@@ -35,7 +58,23 @@ step4 : add whitenoise in middlewere ('whitenoise.middleware.WhiteNoiseMiddlewar
 step5 :git commit
 step6 :git push heroku master
 
-AT LAST CHANGE THE DEBUG TO FALSE
-debug : FALSE
+
+# requirements.txt file
+<pre>
+For static files:
+asgiref==3.4.1
+backports.zoneinfo==0.2.1
+Django==4.0
+sqlparse==0.4.2
+gunicorn==20.1.0
+Pillow==7.0.0
+whitenoise==5.3.0
+
+For database:
+psycopg2==2.8.4
+</pre>
+
+# Command to Install psycopg2 for postgres in ubuntu<br>
+$ sudo apt-get install python3-psycopg2
 
 
