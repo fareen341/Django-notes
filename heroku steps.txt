@@ -55,7 +55,7 @@ Go to heroku and add postgresql ->config vars ->copy the credentials and add it 
 'NAME':'', which is always at the end after /
 'HOST':'', start at @ to amazonaws.com
 'PORT':5432, (given on the credential)
-'USERNAME':'', after the : and before the colon
+'USER':'', after the : and before the colon
 'PASSWORD':'' before the :
 
 step2: python manage.py migrate and superuser command
