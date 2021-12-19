@@ -2897,7 +2897,7 @@ class Meta:
 </pre>
 
 
-<a name="tfourty_one"><h2>To run project on EC2 local machine without nginx or other server.</h2></a><br>
+<a name="fourty_one"><h2>To run project on EC2 local machine without nginx or other server.</h2></a><br>
 <pre>
 Step 1: Launch EC2 , add 8000 port on inbound rule
 Step 2: Change the django host to * or the EC2 domain.
