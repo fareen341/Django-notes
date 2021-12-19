@@ -43,6 +43,7 @@ https://simpleisbetterthancomplex.com/tutorial/2016/08/08/how-to-export-to-pdf.h
 [<p>2.34 Aggregate functions</p>](#thirty_eight)
 [<p>List of errors when performing the practical</p>](#thirty_five)
 [<p>Extra</p>](#thirty_six)
+[<p>To run project on EC2 local machine without nginx or other server.</p>](#thirty_seven)
 
 -----------------------------
 <a name="one"><h2>1.1 Course Description</h2></a><br>
@@ -2893,4 +2894,13 @@ By default django table name is named as modelName_AppName, Example appname=Food
 <pre>
 class Meta:
 	db_table="Fooddb"    
+</pre>
+
+
+<a name="thirty_seven"><h2>To run project on EC2 local machine without nginx or other server.</h2></a><br>
+<pre>
+Step 1: Launch EC2 , add 8000 port on inbound rule
+Step 2: Change the django host to * or the EC2 domain.
+Step 3: Run django server as in : 0.0.0.0:8000
+Step 4: Run on browser using EC2_domain:8000
 </pre>
