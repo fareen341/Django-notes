@@ -2907,3 +2907,5 @@ Step 2: Change the django host to * or the EC2 domain.
 Step 3: Run django server as in : 0.0.0.0:8000
 Step 4: Run on browser using EC2_domain:8000
 </pre>
+
+<h1>Manager in django</h1>
