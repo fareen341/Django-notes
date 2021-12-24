@@ -937,6 +937,9 @@ product_id = models.IntegerField(primary_key=True)
 Now when we run the migartion it'll do the following:
     - Remove field id from product
     - Add field product_id to product
+    
+    
+for more one line update, save & delete: https://www.webforefront.com/django/singlemodelrecords.html
 </pre>
 
 <b>1)default</b>
