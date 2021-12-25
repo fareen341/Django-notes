@@ -1,3 +1,5 @@
+Heroku cli must be install along with other heroku modules
+
 CHANGE THE DEBUG TO FALSE
 debug : FALSE
 change allowed host
