@@ -2584,7 +2584,7 @@ Step 3:urls.py
 path('pdf/',views.GeneratePDF.as_view()),
 
 For image to work on pdf we need to give complete path not the type of path we give in normal django style static.
-As in :     <img src="C:\Users\fareen\PycharmProjects\ajax\ajax\static\img\abc.jpg"  height="200px" width="200px" />
+As in :     &lt; img src="C:\Users\fareen\PycharmProjects\ajax\ajax\static\img\abc.jpg"  height="200px" width="200px" /&gt;
 
 </pre>
 Output:
