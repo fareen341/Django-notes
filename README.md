@@ -2927,3 +2927,5 @@ Step 4: Run on browser using EC2_domain:8000
 </pre>
 
 <h1>Manager in django</h1>
+
+Django Books On Web: https://books.agiliq.com/en/latest/README.html
