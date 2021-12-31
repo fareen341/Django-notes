@@ -898,7 +898,7 @@ from home.models import Contact
 Step 3: Query the queryset you want
 
 To get all the objects in db.
->>>Contact.objects.all() 
+>Contact.objects.all() 
 
 To get the first object.
 Contact.objects.all()[0]
@@ -929,8 +929,8 @@ To add the record
 To see the generated query import model and use query function.
 In shell :
 from django.contrib.auth.models import User
->> x=User.objects.all()
->> print(x.query)
+> x=User.objects.all()
+> print(x.query)
 This will show the sql raw query
 </pre>
 For more queryset: making queries django, on google.<br> 
