@@ -925,6 +925,13 @@ ADDING DATA:
 We can add and edit the record in db using create.
 To add the record 
  joe = Address.objects.create(email="Joe@123",city="mumbai").save()		//it'll without save() too
+
+To see the generated query import model and use query function.
+In shell :
+from django.contrib.auth.models import User
+>> x=User.objects.all()
+>> print(x.query)
+This will show the sql raw query
 </pre>
 For more queryset: making queries django, on google.<br> 
 
