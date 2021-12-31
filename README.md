@@ -932,6 +932,8 @@ from django.contrib.auth.models import User
 > x=User.objects.all()
 > print(x.query)
 This will show the sql raw query
+
+Refer link for more Django Query: https://books.agiliq.com/projects/django-orm-cookbook/en/latest/introduction.html
 </pre>
 For more queryset: making queries django, on google.<br> 
 
