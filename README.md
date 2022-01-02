@@ -934,6 +934,15 @@ from django.contrib.auth.models import User
 This will show the sql raw query
 
 Refer link for more Django Query: https://books.agiliq.com/projects/django-orm-cookbook/en/latest/introduction.html
+
+
+To convert sql to model:
+in python shell:
+for p in Blog.objects.raw('SELECT * FROM BlogApp_Blog'):
+     print(p)
+     
+This will print all the available blogs.
+This is usefull when we have raw sql query and we wants to check what will that query returns and other situations.
 </pre>
 For more queryset: making queries django, on google.<br> 
 
