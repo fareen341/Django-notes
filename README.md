@@ -2938,3 +2938,19 @@ Step 4: Run on browser using EC2_domain:8000
 <h1>Manager in django</h1>
 
 Django Books On Web: https://books.agiliq.com/en/latest/README.html
+
+<h1>Customizing Django Admin Panel</h1>
+<pre>
+https://django-jazzmin.readthedocs.io/installation/
+
+To get cuztimized theme with other UI tweeks:
+JAZZMIN_SETTINGS = {
+     "show_ui_builder" : True
+}
+
+For dark theme:
+JAZZMIN_UI_TWEAKS = {
+     "theme": "darkly",
+}
+</pre>
+
