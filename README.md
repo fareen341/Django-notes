@@ -2940,9 +2940,8 @@ Step 4: Run on browser using EC2_domain:8000
 Django Books On Web: https://books.agiliq.com/en/latest/README.html
 
 <h1>Customizing Django Admin Panel</h1>
-<pre>
 https://django-jazzmin.readthedocs.io/installation/
-
+<pre>
 To get cuztimized theme with other UI tweeks:
 JAZZMIN_SETTINGS = {
      "show_ui_builder" : True
