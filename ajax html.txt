@@ -162,7 +162,9 @@ function updateUser(){
 };
 
 //delete function
- function deletefunction(id){
+function deletefunction(id){
+ var action = confirm("Are you sure you want to delete this user?");
+  if (action != false) {
         var id=id;
         console.log(id);
          $.ajax({
@@ -182,8 +184,9 @@ function updateUser(){
                 }
             }
          });
+         }
     }
-
+    
 </script>
 </html>
 
@@ -194,7 +197,7 @@ function updateUser(){
 
 
 
-
+EXAMPLE 2:
 using modal:
 
 <!DOCTYPE html>
@@ -395,7 +398,9 @@ function updateUser(){
 };
 
 //delete function
- function deletefunction(id){
+function deletefunction(id){
+ var action = confirm("Are you sure you want to delete this user?");
+  if (action != false) {
         var id=id;
         console.log(id);
          $.ajax({
@@ -415,8 +420,8 @@ function updateUser(){
                 }
             }
          });
+         }
     }
-
 </script>
 </html>
 
