@@ -926,6 +926,11 @@ We can add and edit the record in db using create.
 To add the record 
  joe = Address.objects.create(email="Joe@123",city="mumbai").save()		//it'll without save() too
 
+UPDATING DATA:
+obj = Product.objects.get(pk=pk)
+obj.name = "some_new_value"
+obj.save()
+
 To see the generated query import model and use query function.
 In shell :
 from django.contrib.auth.models import User
