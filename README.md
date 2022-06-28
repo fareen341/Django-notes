@@ -44,6 +44,7 @@ https://simpleisbetterthancomplex.com/tutorial/2016/08/08/how-to-export-to-pdf.h
 [<p>List of errors when performing the practical</p>](#thirty_five)
 [<p>Extra</p>](#thirty_six)
 [<p>To run project on EC2 local machine without nginx or other server.</p>](#fourty_one)
+[<p>Django Middleware</p>](#middle)
 
 -----------------------------
 <a name="one"><h2>1.1 Course Description</h2></a><br>
@@ -2092,8 +2093,8 @@ LOGIN_REDIRECT_URL = "/"
 </pre>
 
 <a name="nineteen"><h2>2.17 Class Based Views (CBV)</h2></a><br>
-Base Class-Based Views / Base View<br>
-Generic Class-Based Views / Generic View<br>
+Base Class-Based Views / Base View: have different method for get and post request.<br>
+Generic Class-Based Views / Generic View: have ListView, FormView, CreateView, UpdateView, DeleteView<br>
 
 To understand more on class based views follow: https://www.dennisivy.com/post/django-class-based-views/#:~:text=So%20what%20are%20class%20based,make%20our%20application%20more%20DRY.
 
@@ -2959,4 +2960,12 @@ JAZZMIN_UI_TWEAKS = {
      "theme": "darkly",
 }
 </pre>
+
+<a name="fourty_one"><h2>Django Middleware/h2></a><br>
+<pre>
+Django Middleware:
+Conside the above diagram
+From wsgi request will pass through the middleware and we have security middleware, session middleware etc in between. And when response passes to wsgi it again checks the middleware. We can also create a custom middleware.
+</pre>
+
 
