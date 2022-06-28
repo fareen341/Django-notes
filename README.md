@@ -2095,6 +2095,8 @@ LOGIN_REDIRECT_URL = "/"
 Base Class-Based Views / Base View<br>
 Generic Class-Based Views / Generic View<br>
 
+To understand more on class based views follow: https://www.dennisivy.com/post/django-class-based-views/#:~:text=So%20what%20are%20class%20based,make%20our%20application%20more%20DRY.
+
 Advantages:<br>
 1)Organization of code related to specific HTTP methods(GET, POST, etc) can be addressed by seperate methods instead of conditional branching.<br>
 2)Can use inheritance.<br>
