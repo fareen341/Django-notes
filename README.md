@@ -45,6 +45,7 @@ https://simpleisbetterthancomplex.com/tutorial/2016/08/08/how-to-export-to-pdf.h
 [<p>Extra</p>](#thirty_six)
 [<p>To run project on EC2 local machine without nginx or other server.</p>](#fourty_one)
 [<p>Django Middleware</p>](#middle)
+[<p>ORM QUERIES</p>](#orm)
 
 -----------------------------
 <a name="one"><h2>1.1 Course Description</h2></a><br>
@@ -2961,11 +2962,18 @@ JAZZMIN_UI_TWEAKS = {
 }
 </pre>
 
-<a name="fourty_one"><h2>Django Middleware/h2></a><br>
+<a name="fourty_one"><h2>Django Middleware</h2></a><br>
 <pre>
 Django Middleware:
 Conside the above diagram
 From wsgi request will pass through the middleware and we have security middleware, session middleware etc in between. And when response passes to wsgi it again checks the middleware. We can also create a custom middleware.
 </pre>
 
+<a name="orm"><h2>ORM QURIES</h2></a><br>
+Select Sql query?
+<pre>
+SQL: select * from Products;
+
+ORM: 
+</pre>
 
