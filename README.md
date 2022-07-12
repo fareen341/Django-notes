@@ -2970,10 +2970,261 @@ From wsgi request will pass through the middleware and we have security middlewa
 </pre>
 
 <a name="orm"><h2>ORM QURIES</h2></a><br>
-Select Sql query?
 <pre>
-SQL: select * from Products;
-
-ORM: 
-</pre>
+    <b>SQL: select * from Emp;</b>
+    ORM: emp.objects.all()
+    o/p:
+    &lt;QuerySet [<Emp: Emp object (1)>, <Emp: Emp object (2)>, <Emp: Emp object (3)>, <Emp: Emp object (4)>, <Emp: Emp object (5)>]&gt;
+    
+    We can iterate the above query as :
+    for i in emp.objects.all():
+        print(i.name)
+    
+    To get all values:
+    ORM: emp.objects.all().values()
+    o.p:
+    &lt;QuerySet [{'id': 1, 'name': 'Seema', 'location': 'Europe', 'salary': 300}, {'id': 2, 'name': 'Fareen', 'location': 'Dubai', 'salary': 300}, {'id': 3, 'name': 'Roma', 'location': 'Singapor', 'salary': 100}, {'id': 4, 'name': 'Anil', 'location': 'India', 'salary': 100}, {'id': 5, 'name': 'Neha', 'location': 'Japan', 'salary': 200}]&gt;
+    
+    
+    <b>SQL: select name from emp;</b>
+    ORM: emp.objects.all().values_list("name")
+    This will return tuple of all names
+    o.p: 
+    &lt;QuerySet [('Seema',), ('Fareen',), ('Roma',), ('Anil',), ('Neha',)]&gt;
+    
+    To get list of all names:
+    emp.objects.all().values_list("name")
+    o/p:
+    &lt;QuerySet ['Seema', 'Fareen', 'Roma', 'Anil', 'Neha']&gt;
+    
+    <b>SQL:select name,location from emp;</b>
+    ORM: emp.objects.all().values_list("name","location")
+    o/p: 
+    &lt;QuerySet [('Seema', 'Europe'), ('Fareen', 'Dubai'), ('Roma', 'Singapor'), ('Anil', 'India'), ('Neha', 'Japan')]&gt;
+    
+    <b>Note:</b> flat=True can be done with only one parameter it cant be done when values_list("name","location")
+    
+    
+    <b>WHERE CONDITION</b>
+    
+    <b>SQL: select * from emp where name="Seema"</b>
+    ORM: emp.objects.filter(name="Seema").values()
+    o/p: Returns a list of dicts
+    &lt;QuerySet [{'id': 1, 'name': 'Seema', 'location': 'Europe'}]&gt;
+    
+    <b>SQL: select * from emp where salary > 200</b>
+    ORM: emp.objects.filter(salary__gt = 200).values()
+    o/p:
+    &lt;QuerySet [{'id': 1, 'name': 'Seema', 'location': 'Europe', 'salary': 300}, {'id': 2, 'name': 'Fareen', 'location': 'Dubai', 'salary': 300}]&gt;
+    
+    Use: 
+    salary greater than equal to 200 : salary__gte = 200
+    
+    Using Range: It is better to use range instead of lt, gt etc, but it is useful
+    ORM: emp.objects.filter(salary__range = (200,300)).values()
+    o/p: returns all the emp having salary in 200 to 300 range, including 200 & 300
+    
+    Using not in given range:
+    ORM: emp.objects.exclude(salary__range = (200,300)).values()
+    o/p:
+    select all salary except in range 200,300
+    &lt;QuerySet [{'id': 3, 'name': 'Roma', 'location': 'Singapor', 'salary': 100}, {'id': 4, 'name': 'Anil', 'location': 'India', 'salary': 301}]&gt;
+    
+    <b>USING LOGICAL OPERATOR(and, or and not)</b>
+    We use comma for and operator, we can also use &
+    
+    SQL: select * from emp where salary>100 and salary<300
+    ORM: emp.objects.filter(salary__gt = 100, salary__lt = 300).values()
+    o/p: 
+    &lt;QuerySet [{'id': 2, 'name': 'Fareen', 'location': 'Dubai', 'salary': 200}, {'id': 5, 'name': 'Neha', 'location': 'Japan', 'salary': 250}]&gt;
+    
+    using & operator
+    
+    ORM: emp.objects.filter(salary__gt = 100).values() & emp.objects.filter(salary__lt = 300).values()
+    o/p: same as above
+    
+    <b>SQL: select * from employee where salary=100 OR salary==300;</b>
+    ORM: emp.objects.filter(salary = 100).values() | emp.objects.filter(salary = 300).values()
+    o/p:
+    &lt;QuerySet [{'id': 1, 'name': 'Seema', 'location': 'Europe', 'salary': 300}, {'id': 3, 'name': 'Roma', 'location': 'Singapor', 'salary': 100}, {'id': 4, 'name': 'Anil', 'location': 'India', 'salary': 100}]&gt;
+    
+    
+    ALSO using Q, but using Q we cannot use .values()
+    
+    from django.db.models import Q
+    ORM: emp.objects.filter(Q(salary=100) | Q(salary=200))
+    o/p:
+    &lt;QuerySet [<Emp: Emp object (2)>, <Emp: Emp object (3)>, <Emp: Emp object (4)>]&gt;
+    
+    
+    <b>NOT EQUAL</b>
+    <b>SQL: select * from emp where salary != 100;</b>
+    ORM: emp.objects.exclude(salary=100).values()
+    o/p:
+    return all records except having salary 100
+    
+    <b>SQL: select * from emp where name="Seema" salary != 200;</b>
+    ORM: emp.objects.filter(name="Seema").exclude(salary=300).values()
+    
+    <b>LIKE OPERATOR</b>
+    <b>SQL: select * from emp where name LIKE "s%a"</b>
+    ORM: emp.objects.filter(name__startswith = "s", name__endswith = "a").values()
+    o/p:
+    &lt;QuerySet [{'id': 1, 'name': 'Seema', 'location': 'Europe', 'salary': 300}]&gt;
+    
+    We can also use __contains or __icontains (case-insensitive): eg: name__contains='pattern'
+    Example: emp.objects.filter(name__contains = "seema").values()
+    o/p: 
+    returns Seema record
+    
+    <b>Note: It search for case insensitive as in we have record name Seema, 'S' capital and we
+    are searching for small s, still it return the result as seema.</b>
+    
+    
+    <h3>CLAUSES</h3>
+    
+    <b>ORDER BY</b>
+    
+    Ascending:
+    <b>select * from emp order by id;</b>
+    ORM: emp.objects.all().order_by('id')
+    o/p:
+    &lt;QuerySet [<Emp: Emp object (1)>, <Emp: Emp object (2)>, <Emp: Emp object (3)>, <Emp: Emp object (4)>, <Emp: Emp object (5)>]&gt;
+    
+    Desc:
+    ORM: emp.objects.all().order_by('-id').values()
+    &lt;QuerySet [{'id': 5, 'name': 'Neha', 'location': 'Japan', 'salary': 250}, {'id': 4, 'name': 'Anils', 'location': 'India', 'salary': 500}, {'id': 3, 'name': 'SRoma', 'location': 'Singapor', 'salary': 100}, {'id': 2, 'name': 'Fareen', 'location': 'Dubai', 'salary': 200}, {'id': 1, 'name': 'Seema', 'location': 'Europe', 'salary': 300}]&gt;
+    
+    Multiple order by:
+    ORM: emp.objects.all().order_by('-id','-name')
+    &lt;QuerySet [<Emp: Emp object (5)>, <Emp: Emp object (4)>, <Emp: Emp object (3)>, <Emp: Emp object (2)>, <Emp: Emp object (1)>]&gt;
+    
+    <b>USING LIMIT</b>
+    
+    <b>SQL: select * from emp limit 5</b>
+    ORM: emp.objects.all()[0:2]
+    o/p:
+    &lt;QuerySet [<Emp: Emp object (1)>, <Emp: Emp object (2)>, <Emp: Emp object (3)>, <Emp: Emp object (4)>, <Emp: Emp object (5)>]&gt;
+    
+    <b>Note</b>: 
+    1)we cannot use negative index example:
+    emp.objects.all()[-1]
+    
+    2)But we can use it for reverse order example:
+    emp.objects.all()[0:5:-1]   
+    o/p:
+    [<Emp: Emp object (5)>, <Emp: Emp object (4)>, <Emp: Emp object (3)>, <Emp: Emp object (2)>, <Emp: Emp object (1)>]
+    
+    3)We can also use first() or last() to get first and last record only.
+    
+    <b>USING GROUP BY</b>
+    <b>SQL: select name, count(name) as dcount from emp group by name;</b>
+    ORM: result = (emp.objects.values('name').annotate(dcount=Count('name')).order_by())
+    o/p:
+    &lt;QuerySet [{'name': 'Fareen', 'dcount': 1}, {'name': 'Neha', 'dcount': 1}, {'name': 'SRoma', 'dcount': 1}, {'name': 'Seema', 'dcount': 2}]&gt;
+    
+    We can show it in ascending and desc order by dcount
+    example: desc dcount
+    o/p:
+    &lt;QuerySet [{'name': 'Seema', 'dcount': 2}, {'name': 'SRoma', 'dcount': 1}, {'name': 'Neha', 'dcount': 1}, {'name': 'Fareen', 'dcount': 1}]&gt;
+    
+    <b>It does the case sensitive group by, example : fareen and Fareen are not same</b>
+    Example:
+    o/p: result = (emp.objects.values('name').annotate(dcount=Count('name')).order_by('-dcount'))
+    &lt;QuerySet [{'name': 'Seema', 'dcount': 2}, {'name': 'Fareen', 'dcount': 2}, {'name': 'fareen', 'dcount': 1}]&gt;
+    
+    See id 3 has fareen seperate
+    
+    <b>Having Clause</b>
+    
+    <b>SQL: select name,count(name) as count_name from emp group by name having count(name)>3;</b>
+    ORM: result = (emp.objects.values('name').annotate(dcount=Count('name')).filter(dcount__gt = 2))
+    o/p:
+    &lt;QuerySet [{'name': 'Fareen', 'dcount': 3}]&gt;
+    
+    Not equal ORM:
+    result = (emp.objects.values('name').annotate(dcount=Count('name')).exclude(dcount = 2))
+    
+    <b>Note: we have gt: greater than, gte: greater than and equal to, same for less than lt, lte and 
+    for equal to we use '=' it don't have not equal != instead we can use exclude</b>
+    
+    <h3>Aggregate functions</h3>
+    
+    <b>SQL: select count(id) from emp;</b>
+    ORM: emp.objects.all().count()
+    o/p:
+    5
+    
+    We cannot pass any parameter inside count but using aggregrate function we can provide paramter 
+    inside Count, rememeber to import it, and 'c' capital.
+    ORM: 
+    from django.db.models import Count
+    emp.objects.aggregate(name = Count('name'))
+    {'name': 5}
+    
+    <b>SQL: select min(salary) as min_salary from emp;</b>
+    Here in sql we use 'as' for alias but below we have min_salary as alias
+    
+    ORM:
+    from django.db.models import Min, Max, Avg, Sum
+    
+    emp.objects.aggregate(min_salary = Min('salary'))
+    {'min_salary': 100}
+    
+    emp.objects.aggregate(min_salary = Max('salary'))
+    {'min_salary': 600}
+    
+    emp.objects.aggregate(min_salary = Avg('salary'))
+    {'min_salary': 350.0}
+    
+    emp.objects.aggregate(min_salary = Sum('salary'))
+    {'min_salary': 1750}
+    
+    <b>Note: if we want to find the name, salary of emp who has minimum salary then using aggregrate we cannot find
+    For that we have to use subqueries
+    Even if we use like this, it won't work:
+    ORM: emp.objects.values('name','salary').aggregate(min_salary = Min('salary'))
+    o/p:
+    {'min_salary': 100}
+    </b>
+    
+    To find the name of the emp having minimum salary using subquries:
+    
+    <h3>Sub queries</h3> 
+    
+    <b>SQL: select name, location from emp where salary = (select min(salary) from emp);</b>
+    ORM:
+    x=emp.objects.aggregate(min_sal = Min('salary'))
+    y=x['min_sal']
+    emp.objects.values('name','salary').filter(salary=y)
+    o/p:
+    &lt;QuerySet [{'name': 'Fareen', 'salary': 100}]&gt;
+     
+    <h3>Functions</h3>
+    
+    <b>DISTINCT</b>
+    
+    <b>SQL: select distinct(name) as names from emp;</b>
+    ORM: emp.objects.values('name').distinct()
+    o/p:
+    &lt;QuerySet [{'name': 'Seema'}, {'name': 'Fareen'}]&gt;
+    
+    <h3>JOINS</h3>
+    
+    emp is parent table and dept is child table.
+    
+    ORM: dept.objects.all().values()
+    o/p: select_related & prefetch_related will return the same output
+    &lt;QuerySet [{'id': 1, 'dept_id_id': 1, 'dept_name': 'Software Engineer', 'location': 'USA'}, {'id': 2, 'dept_id_id': 1, 'dept_name': 'Tech Support', 'location': 'Manali'}, {'id': 3, 'dept_id_id': 4, 'dept_name': 'IT', 'location': 'Mumbai'}]&gt;
+    
+    OR using select_related:
+    dept.objects.select_related('dept_id').values()
+    
+    OR using prefetch_related:
+    dept.objects.prefetch_related('dept_id').values()
+    
+    
+    </pre>
+    
+    
 
