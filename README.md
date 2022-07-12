@@ -3006,6 +3006,11 @@ From wsgi request will pass through the middleware and we have security middlewa
     
     <b>Note:</b> flat=True can be done with only one parameter it cant be done when values_list("name","location")
     
+    <b>Interview question: difference between values(), values_list(), values_list(flat=True)
+    values(): return list of dicts
+    values_list(): returns list of all tuples
+    values_list(flat=True): return list of all records, cannot be used with two values.
+    </b>
     
     <b>WHERE CONDITION</b>
     
