@@ -2990,7 +2990,7 @@ From wsgi request will pass through the middleware and we have security middlewa
     o/p:
     &lt;QuerySet [{'name': 'Seema'}, {'name': 'Fareen'}, {'name': 'Fareen'}, {'name': 'Seema'}, {'name': 'Fareen'}]&gt;
     
-    2)emp.objects.all().values_list("name")
+    2)emp.objects.all().values_list("name", flat=True)
     &lt;QuerySet [('Seema',), ('Fareen',), ('Fareen',), ('Seema',), ('Fareen',)]&gt;
     
     <b>SQL: select name from emp;</b>
