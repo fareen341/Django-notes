@@ -2985,6 +2985,13 @@ From wsgi request will pass through the middleware and we have security middlewa
     o.p:
     &lt;QuerySet [{'id': 1, 'name': 'Seema', 'location': 'Europe', 'salary': 300}, {'id': 2, 'name': 'Fareen', 'location': 'Dubai', 'salary': 300}, {'id': 3, 'name': 'Roma', 'location': 'Singapor', 'salary': 100}, {'id': 4, 'name': 'Anil', 'location': 'India', 'salary': 100}, {'id': 5, 'name': 'Neha', 'location': 'Japan', 'salary': 200}]&gt;
     
+    To get only names we can use both:
+    1)emp.objects.all().values("name")
+    o/p:
+    &lt;QuerySet [{'name': 'Seema'}, {'name': 'Fareen'}, {'name': 'Fareen'}, {'name': 'Seema'}, {'name': 'Fareen'}]&gt;
+    
+    2)emp.objects.all().values_list("name")
+    &lt;QuerySet [('Seema',), ('Fareen',), ('Fareen',), ('Seema',), ('Fareen',)]&gt;
     
     <b>SQL: select name from emp;</b>
     ORM: emp.objects.all().values_list("name")
