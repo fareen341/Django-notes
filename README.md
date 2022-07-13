@@ -3056,12 +3056,12 @@ From wsgi request will pass through the middleware and we have security middlewa
     &lt;QuerySet [{'id': 1, 'name': 'Seema', 'location': 'Europe', 'salary': 300}, {'id': 3, 'name': 'Roma', 'location': 'Singapor', 'salary': 100}, {'id': 4, 'name': 'Anil', 'location': 'India', 'salary': 100}]&gt;
     
     
-    ALSO using Q, but using Q we cannot use .values()
+    ALSO using Q
     
     from django.db.models import Q
-    ORM: emp.objects.filter(Q(salary=100) | Q(salary=200))
+    ORM: emp.objects.filter(Q(salary=100) | Q(salary=200)).values()
     o/p:
-    &lt;QuerySet [<Emp: Emp object (2)>, <Emp: Emp object (3)>, <Emp: Emp object (4)>]&gt;
+    &lt;QuerySet [{'id': 3, 'name': 'Arshad', 'location': 'Singapor', 'salary': 100}]&gt;
     
     
     <b>NOT EQUAL</b>
