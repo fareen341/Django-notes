@@ -3213,6 +3213,8 @@ From wsgi request will pass through the middleware and we have security middlewa
     
     <b>SQL: select distinct(name) as names from emp;</b>
     ORM: emp.objects.values('name').distinct()
+    OR
+    ORM: emp.objects.all().distinct().values("name")
     o/p:
     &lt;QuerySet [{'name': 'Seema'}, {'name': 'Fareen'}]&gt;
     
