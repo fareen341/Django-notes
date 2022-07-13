@@ -3084,6 +3084,10 @@ From wsgi request will pass through the middleware and we have security middlewa
     o/p: 
     returns Seema record
     
+    <b>IN operator</b>
+    emp.objects.filter(salary__in = (100,200,300)).values()
+    &lt;QuerySet [{'id': 1, 'name': 'Seema', 'location': 'Europe', 'salary': 300}, {'id': 3, 'name': 'Arshad', 'location': 'Singapor', 'salary':    100}]&gt;
+    
     <b>Note: It search for case insensitive as in we have record name Seema, 'S' capital and we
     are searching for small s, still it return the result as seema.</b>
     
