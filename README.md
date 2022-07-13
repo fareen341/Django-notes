@@ -3222,6 +3222,11 @@ From wsgi request will pass through the middleware and we have security middlewa
     o/p:
     &lt;QuerySet [{'name': 'Seema'}, {'name': 'Fareen'}]&gt;
     
+    <b>Lower in queryset</b>
+    emp.objects.all().order_by(Lower('name')).values_list('name', flat=True)
+    o/p:
+    &lt;QuerySet ['Arshad', 'Fareen', 'Neha', 'Seema', 'Seema']&gt;
+    
     <h3>JOINS</h3>
     
     emp is parent table and dept is child table.
@@ -3235,6 +3240,11 @@ From wsgi request will pass through the middleware and we have security middlewa
     
     OR using prefetch_related:
     dept.objects.prefetch_related('dept_id').values()
+    
+    <h3>Truncate</h3>
+    emp.objects.all().delete()
+    Will truncate the emp table
+    
     
     
     </pre>
