@@ -3270,6 +3270,9 @@ class Student(CommonInfo):
     fees=models.CharField()
     
 other classes....
+
+
+Example: Student name, teacher name, principle name in all these names are common so we take these name in one single class which is CommonInfo or any name. So that we can inherit from this class.
 </pre>
 
 <h1>Multi-table inheritance</h1>
