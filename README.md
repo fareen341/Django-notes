@@ -46,6 +46,8 @@ https://simpleisbetterthancomplex.com/tutorial/2016/08/08/how-to-export-to-pdf.h
 [<p>To run project on EC2 local machine without nginx or other server.</p>](#fourty_one)
 [<p>Django Middleware</p>](#middle)
 [<p>ORM QUERIES</p>](#orm)
+[<p>Inheritance in Django</p>](#inhe)
+[<p>Protecting the sensitive data from external use</p>](#protect)
 
 -----------------------------
 <a name="one"><h2>1.1 Course Description</h2></a><br>
@@ -3249,5 +3251,48 @@ From wsgi request will pass through the middleware and we have security middlewa
     
     </pre>
     
+<a name="inhe"><h2>Inheritance in django</h2></a><br>    
+<h1>Inheritance</h1>
+<h1>Abstract base class inheritance</h1>
+<pre>
+1)We use this when we have something common.
+2)It'll become abstract base class when we write abstract = True.
+3)No table will be created for abstract base class.
+4)In the below program after writing the last two line it became abstract class.
+</pre>
+
+![image](https://user-images.githubusercontent.com/59610617/138540998-14795ba2-f54f-4fd7-aeef-c674313cfb02.png)
+
+<pre>
+creating the child class:
+
+class Student(CommonInfo):
+    fees=models.CharField()
     
+other classes....
+</pre>
+
+<h1>Multi-table inheritance</h1>
+
+![multi-class](https://user-images.githubusercontent.com/59610617/138541331-51b7a812-eb0e-4f86-b4e5-820bf2d44c20.png)
+
+<h1>Proxy Model</h1>
+<pre>
+It'll become proxy model by setting:
+Meta attribute proxy = True
+</pre>
+
+Both class will be same but the behaviour will be change, as in the original one is in ascending order and proxy one we need in desc order. 
+
+![proxy](https://user-images.githubusercontent.com/59610617/138541762-313ef993-9e2e-4697-8a23-99f9985151db.png)
+
+<a name="protect"><h2>Protecting the sensitive data from external use</h2></a><br>   
+<pre>
+There are many case where we want our setting as in secret_key of django project before pushing it on github, database password 
+email setting where password is main concern in these cases we can hide our sensitive data using the django-environ
+
+link: https://pypi.org/project/django-environ/
+</pre>
+
+
 
