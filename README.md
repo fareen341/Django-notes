@@ -3297,5 +3297,10 @@ email setting where password is main concern in these cases we can hide our sens
 link: https://pypi.org/project/django-environ/
 </pre>
 
+<h1>Extra</h1>
+<pre>
+To see the tables of sqlite:
+https://stackoverflow.com/questions/42227778/how-to-view-database-and-schema-of-django-sqlite3-db
+</pre>
 
 
