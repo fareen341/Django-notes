@@ -2964,6 +2964,27 @@ For dark theme:
 JAZZMIN_UI_TWEAKS = {
      "theme": "darkly",
 }
+
+Other themes:
+AdminLTE:
+
+GitHub Repository: https://github.com/dimka665/adminlte-theme
+Django Suit:
+
+GitHub Repository: https://github.com/darklow/django-suit
+Grappelli:
+
+GitHub Repository: https://github.com/sehmaschine/django-grappelli
+Django Jet:
+
+GitHub Repository: https://github.com/geex-arts/django-jet
+Django Material:
+
+GitHub Repository: https://github.com/viewflow/django-material
+Django Material Admin:
+
+GitHub Repository: https://github.com/mbi/django-material-admin
+
 </pre>
 
 <a name="fourty_one"><h2>Django Middleware</h2></a><br>
