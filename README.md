@@ -2952,6 +2952,8 @@ Django Books On Web: https://books.agiliq.com/en/latest/README.html
 
 <h1>Customizing Django Admin Panel</h1>
 https://django-jazzmin.readthedocs.io/installation/
+
+Jazzmin github: https://github.com/farridav/django-jazzmin
 <pre>
 To get cuztimized theme with other UI tweeks:
 JAZZMIN_SETTINGS = {
